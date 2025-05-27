@@ -1,0 +1,298 @@
+<div class="min-h-screen flex flex-col font-montserrat bg-gray-100">
+  <!-- Integrated HeaderComponent with sidebar toggle -->
+  <app-header (sidebarToggle)="onToggleSidebar()"></app-header>
+
+  <div class="flex flex-1 flex-col md:flex-row pt-16">
+    <!-- Sidebar with Inputs -->
+    <aside
+      class="fixed top-16 left-0 w-full md:w-80 h-[calc(100vh-4rem)] bg-white p-4 md:p-6 overflow-y-auto custom-scrollbar transition-transform duration-300 ease-in-out z-50"
+      [ngClass]="{'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen}"
+    >
+      <div [formGroup]="customOperationForm" class="space-y-6 h-full">
+        <!-- Operation Name -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+          <label for="operationName" class="text-sm font-medium text-indigo-700">Nom de l'Opération</label>
+          <input
+            type="text"
+            id="operationName"
+            formControlName="operationName"
+            class="w-full px-3 py-2 text-sm border rounded-lg bg-white border-indigo-600 placeholder:text-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            placeholder="Entrez le nom de l'opération"
+            [class.border-red-500]="customOperationForm.get('operationName')?.touched && customOperationForm.get('operationName')?.invalid"
+          />
+          <div
+            *ngIf="customOperationForm.get('operationName')?.touched && customOperationForm.get('operationName')?.invalid"
+            class="text-red-500 text-xs mt-1 flex items-center"
+          >
+            <i class="fas fa-exclamation-circle mr-1"></i> Le nom de l'opération est requis !
+          </div>
+        </div>
+
+        <!-- Tables -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-indigo-700">Tableaux</h3>
+            <button
+              type="button"
+              (click)="addTable()"
+              class="text-green-600 hover:text-green-700 transition-all flex items-center"
+              title="Ajouter un Tableau"
+            >
+              <i class="fas fa-plus-circle fa-lg mr-1"></i> Ajouter Tableau
+            </button>
+          </div>
+          <div class="space-y-6">
+            <ng-container *ngFor="let table of tables; let i = index; trackBy: trackByTable">
+              <div class="bg-white border border-gray-200 rounded-xl p-4 transition-all shadow-sm hover:shadow-md">
+                <div class="flex justify-between items-center mb-4">
+                  <label class="text-sm font-medium text-indigo-700">Tableau {{ i + 1 }}</label>
+                  <button
+                    type="button"
+                    (click)="removeTable(i)"
+                    class="text-red-600 hover:text-red-700 transition-all"
+                    [disabled]="tables.length <= 1"
+                    title="Supprimer le Tableau"
+                  >
+                    <i class="fas fa-trash-alt fa-lg"></i>
+                  </button>
+                </div>
+                <!-- Table Inputs -->
+                <div class="mt-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-sm font-medium text-indigo-700">Tableau</h4>
+                    <button
+                      type="button"
+                      (click)="addInitialRow(i)"
+                      class="text-orange-600 hover:text-orange-700 transition-all"
+                      title="Ajouter une Ligne Initiale"
+                    >
+                      <i class="fas fa-plus-circle fa-lg"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="editable-table grid gap-2 border border-indigo-600 rounded-lg p-2"
+                    [style.grid-template-columns]="'repeat(' + getNumColumns(table) + ', minmax(0, 1fr))'"
+                  >
+                    <ng-container *ngFor="let row of table.rows; let rowIndex = index; trackBy: trackByRow">
+                      <ng-container *ngFor="let cell of row; let colIndex = index; trackBy: trackByCell">
+                        <div
+                          class="cell-content relative"
+                          [style.grid-column]="cell.colspan > 1 ? 'span ' + cell.colspan : 'auto'"
+                          [class.calculated-cell]="cell.calculation"
+                          [attr.title]="cell.calculation ? 'Cellule calculée : ' + (cell.calculation.operation === 'OF_CELL' ? 'OF x Cell' : 'Somme') : ''"
+                        >
+                          <ng-container [ngSwitch]="cell.type">
+                            <input
+                              *ngSwitchCase="'text'"
+                              [id]="cell.id || 'cell_' + i + '_' + rowIndex + '_' + colIndex"
+                              [(ngModel)]="cell.content"
+                              [ngModelOptions]="{ standalone: true }"
+                              type="text"
+                              class="px-2 py-1 text-sm w-full bg-white rounded-lg border border-indigo-600 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              (input)="onCellInput(i, rowIndex, colIndex, $event)"
+                              (contextmenu)="onInputContextMenu($event, i, rowIndex, colIndex)"
+                            />
+                            <input
+                              *ngSwitchCase="'number'"
+                              [id]="cell.id || 'cell_' + i + '_' + rowIndex + '_' + colIndex"
+                              [(ngModel)]="cell.content"
+                              [ngModelOptions]="{ standalone: true }"
+                              type="text"
+                              class="px-2 py-1 text-sm w-full bg-white rounded-lg border border-indigo-600 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              [disabled]="cell.calculation?.operation === 'SUM' || cell.calculation?.operation === 'OF_CELL'"
+                              (input)="onCellInput(i, rowIndex, colIndex, $event)"
+                              (contextmenu)="onInputContextMenu($event, i, rowIndex, colIndex)"
+                            />
+                          </ng-container>
+                          <span
+                            *ngIf="cell.calculation"
+                            class="calculated-label"
+                            [ngClass]="{'of-calculation': cell.calculation.operation === 'OF_CELL'}"
+                          >(* {{ cell.calculation.operation }})</span>
+                          <span
+                            *ngIf="isCellSelectedForSum(i, rowIndex, colIndex)"
+                            class="selected-label"
+                          >(Sélectionné pour SOMME)</span>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Annotation Section -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-lg font-semibold text-indigo-700 mb-4">Annotations</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <button
+              type="button"
+              (click)="addText()"
+              class="flex items-center justify-center p-2 bg-green-100 hover:bg-green-200 rounded-lg transition-all"
+              title="Ajouter du Texte"
+            >
+              <i class="fas fa-text-width fa-lg text-green-600 mr-2"></i> Texte
+            </button>
+            <button
+              type="button"
+              (click)="addArrow()"
+              class="flex items-center justify-center p-2 bg-purple-100 hover:bg-purple-200 rounded-lg transition-all"
+              title="Ajouter une Flèche"
+            >
+              <i class="fas fa-arrow-right-long fa-lg text-purple-600 mr-2"></i> Flèche
+            </button>
+            <button
+              type="button"
+              (click)="triggerImageUpload()"
+              class="flex items-center justify-center p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-all"
+              title="Ajouter une Image"
+            >
+              <i class="fas fa-image fa-lg text-blue-600 mr-2"></i> Image
+            </button>
+            <button
+              type="button"
+              (click)="addRectangle()"
+              class="flex items-center justify-center p-2 bg-red-100 hover:bg-red-200 rounded-lg transition-all"
+              title="Ajouter un Rectangle"
+            >
+              <i class="fas fa-vector-square fa-lg text-red-600 mr-2"></i> Rectangle
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div
+      *ngIf="isSidebarOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+      (click)="isSidebarOpen = false"
+    ></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-80 overflow-y-auto p-4 md:p-6 bg-white rounded-lg shadow-sm z-30">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">Aperçu en Direct</h2>
+        <div class="flex space-x-2">
+          <button
+            (click)="undo()"
+            [disabled]="annotationStack.length === 0"
+            class="flex items-center px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-all"
+            title="Annuler (Ctrl+Z)"
+          >
+            <i class="fas fa-undo mr-2"></i> Annuler
+          </button>
+          <button
+            (click)="submitForm()"
+            class="flex items-center px-3 py-1 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-sm text-white transition-all"
+            [disabled]="customOperationForm.invalid"
+            title="Enregistrer l'Opération"
+          >
+            <i class="fas fa-save mr-2"></i> Enregistrer
+          </button>
+        </div>
+      </div>
+      <div
+        #konvaContainer
+        class="w-full h-[calc(100vh-8rem)] md:h-[calc(100vh-10rem)] bg-white border border-gray-200 rounded-lg overflow-auto"
+      ></div>
+    </main>
+
+    <!-- Context Menu -->
+    <div
+      *ngIf="showContextMenu"
+      class="context-menu fixed bg-white rounded-lg border border-gray-200 p-2 shadow-lg z-[1000]"
+      [style.left.px]="contextMenuX"
+      [style.top.px]="contextMenuY"
+    >
+      <div class="context-group submenu-container">
+        <div class="context-heading">Alignement <i class="fas fa-chevron-right text-xs ml-1"></i></div>
+        <div class="submenu">
+          <button (click)="setAlignment('left')"><i class="fas fa-align-left mr-1"></i> Gauche</button>
+          <button (click)="setAlignment('center')"><i class="fas fa-align-center mr-1"></i> Centre</button>
+          <button (click)="setAlignment('right')"><i class="fas fa-align-right mr-1"></i> Droite</button>
+        </div>
+      </div>
+      <div class="context-group submenu-container">
+        <div class="context-heading">Type <i class="fas fa-chevron-right text-xs ml-1"></i></div>
+        <div class="submenu">
+          <button (click)="changeCellType('text')"><i class="fas fa-font mr-1"></i> Texte</button>
+          <button (click)="changeCellType('number')"><i class="fas fa-hashtag mr-1"></i> Nombre</button>
+        </div>
+      </div>
+      <div class="context-group submenu-container">
+        <div class="context-heading">Calcul <i class="fas fa-chevron-right text-xs ml-1"></i></div>
+        <div class="submenu">
+          <button (click)="setCalculation('SUM')"><i class="fas fa-plus mr-1"></i> Somme</button>
+          <button (click)="setCalculation('OF_CELL')"><i class="fas fa-calculator mr-1"></i> OF x Cell</button>
+          <button
+            *ngIf="selectingReferences && selectedCell && tables[selectedCell.tableIndex].rows[selectedCell.rowIndex][selectedCell.colIndex].calculation?.operation === 'SUM'"
+            (click)="finishCalculation('SUM')"
+          ><i class="fas fa-check mr-1"></i> Terminer (Somme)</button>
+          <button
+            *ngIf="selectingReferences && selectedCell && tables[selectedCell.tableIndex].rows[selectedCell.rowIndex][selectedCell.colIndex].calculation?.operation === 'OF_CELL'"
+            (click)="finishCalculation('OF_CELL')"
+          ><i class="fas fa-check mr-1"></i> Terminer (OF x Cell)</button>
+          <button *ngIf="selectingReferences" (click)="cancelCalculation()"><i class="fas fa-times mr-1"></i> Annuler</button>
+        </div>
+      </div>
+      <div class="context-group submenu-container">
+        <div class="context-heading">Fusionner <i class="fas fa-chevron-right text-xs ml-1"></i></div>
+        <div class="submenu">
+          <button (click)="mergeRight()"><i class="fas fa-arrow-right mr-1"></i> À Droite</button>
+          <button (click)="mergeDown()"><i class="fas fa-arrow-down mr-1"></i> En Bas</button>
+          <button (click)="undoMerge()"><i class="fas fa-undo mr-1"></i> Annuler</button>
+        </div>
+      </div>
+      <div class="context-group submenu-container" *ngIf="selectedCell">
+        <div class="context-heading">Tableau <i class="fas fa-chevron-right text-xs ml-1"></i></div>
+        <div class="submenu">
+          <button (click)="addRow(selectedCell.tableIndex)"><i class="fas fa-plus-square mr-1"></i> Ajouter une Ligne</button>
+          <button (click)="removeRow(selectedCell.tableIndex, tables[selectedCell.tableIndex].rows.length - 1)" [disabled]="tables[selectedCell.tableIndex].rows.length <= 1"><i class="fas fa-minus-square mr-1"></i> Supprimer une Ligne</button>
+          <button (click)="addColumn(selectedCell.tableIndex)"><i class="fas fa-plus-circle mr-1"></i> Ajouter une Colonne</button>
+          <button (click)="removeColumn(selectedCell.tableIndex)" [disabled]="getNumColumns(tables[selectedCell.tableIndex]) <= 1"><i class="fas fa-minus-circle mr-1"></i> Supprimer une Colonne</button>
+        </div>
+      </div>
+      <div class="context-group submenu-container">
+        <div class="context-heading">Taille <i class="fas fa-chevron-right text-xs ml-1"></i></div>
+        <div class="submenu">
+          <input
+            type="number"
+            [(ngModel)]="selectedTextSize"
+            (change)="setTextSize()"
+            class="w-full px-1 py-0.5 text-sm border rounded bg-white border-indigo-600 focus:outline-none"
+            placeholder="px"
+            min="8"
+          />
+        </div>
+      </div>
+      <div class="context-group">
+        <button (click)="toggleHeader()">
+          <i class="fas fa-heading mr-1"></i>
+          {{ selectedCell ? (tables[selectedCell.tableIndex].rows[selectedCell.rowIndex][selectedCell.colIndex].isHeader ? 'Retirer En-tête' : 'Définir En-tête') : 'En-tête' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal for Messages -->
+    <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="onModalBackgroundClick($event)">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full shadow-lg">
+        <h3 class="text-lg font-semibold text-indigo-700 mb-4">Message</h3>
+        <p class="text-gray-600">{{ modalMessage }}</p>
+        <div class="mt-6 flex justify-end">
+          <button (click)="closeModal()" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-white transition-all">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden File Input for Image Upload -->
+    <input
+      #stageImageInput
+      type="file"
+      accept="image/*"
+      (change)="onStageImageUpload($event)"
+      class="hidden"
+      multiple
+    />
+  </div>
+</div>

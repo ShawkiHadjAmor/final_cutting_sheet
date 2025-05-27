@@ -1,0 +1,17 @@
+<!-- dashboard.component.html -->
+<div class="min-h-screen flex flex-col bg-gray-100 font-montserrat">
+  <!-- Header -->
+  <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+
+  <div class="flex flex-1 pt-16">
+    <!-- Sidebar -->
+    <app-sidebar [class.hidden]="!sidebarActive" class="md:block"></app-sidebar>
+
+    <!-- Main content area -->
+    <main
+      class="flex-1 p-6 bg-white md:ml-72 transition-all duration-300 ease-in-out"
+    >
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

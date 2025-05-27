@@ -1,0 +1,83 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto min-h-screen flex flex-col">
+  <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+    <span class="material-icons text-blue-600 mr-2">store</span>
+    MAGASIN
+  </h2>
+
+  <div *ngIf="isLoading" class="flex justify-center mt-6">
+    <div class="animate-spin h-10 w-10 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+  </div>
+
+  <div *ngIf="groupedArticles.length === 0 && !isLoading" class="text-center text-gray-500 mt-6">
+    Aucun article trouvé.
+  </div>
+
+  <div *ngFor="let group of groupedArticles" class="mt-8">
+    <h3 class="text-lg font-bold text-blue-900 mb-3">Articles importés le {{ group.date }}</h3>
+
+    <!-- Section: Articles with Cutting Sheets -->
+    <div class="mt-4">
+      <h4 class="text-md font-bold text-blue-800 mb-3">Les OF à préparer avec fiche de coupe</h4>
+      <div *ngIf="group.articlesWithCuttingSheet.length > 0 && group.headers.length > 0" class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-blue-200 rounded-md">
+          <thead>
+            <tr class="bg-blue-50">
+              <th *ngFor="let header of group.headers" class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">{{ header | titlecase }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let article of group.articlesWithCuttingSheet" class="hover:bg-blue-50">
+              <td *ngFor="let cell of getTableCells(article)" class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">{{ cell }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="group.articlesWithCuttingSheet.length === 0" class="text-center text-gray-500 mt-4">
+        Aucun article avec fiche de coupe trouvé.
+      </div>
+    </div>
+
+    <!-- Section: Articles without Cutting Sheets -->
+    <div class="mt-8">
+      <h4 class="text-md font-bold text-blue-800 mb-3">Les OF à préparer sans fiche de coupe</h4>
+      <div *ngIf="group.articlesWithoutCuttingSheet.length > 0 && group.headers.length > 0" class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-blue-200 rounded-md">
+          <thead>
+            <tr class="bg-blue-50">
+              <th *ngFor="let header of group.headers" class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">{{ header | titlecase }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let article of group.articlesWithoutCuttingSheet" class="hover:bg-blue-50">
+              <td *ngFor="let cell of getTableCells(article)" class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">{{ cell }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="group.articlesWithoutCuttingSheet.length === 0" class="text-center text-gray-500 mt-4">
+        Aucun article sans fiche de coupe trouvé.
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Modal (Error) -->
+  <div *ngIf="messageModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <div class="flex items-center gap-3 mb-4">
+        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        <h2 class="text-lg font-bold text-blue-900">{{ messageTitle }}</h2>
+      </div>
+      <p class="text-gray-700 mb-6">{{ messageModal }}</p>
+      <div class="flex justify-end">
+        <button
+          (click)="closeMessageModal()"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

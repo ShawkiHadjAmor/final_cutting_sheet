@@ -1,0 +1,28 @@
+{
+  "rows": [
+    {
+      "firstname": "John",
+      "lastname": "Deo",
+      "email": "john@example.com",
+      "password":"********"
+     },
+     {
+      "firstname": "Mary",
+      "lastname": "Moe",
+      "email": "mary@example.com",
+       "password":"********"
+     },
+     {
+      "firstname": "July",
+      "lastname": "Dooley",
+      "email": "july@example.com",
+       "password":"********"
+     },
+     {
+    "firstname": "Pitar",
+    "lastname": "Pen",
+    "email": "pen@example.com",
+    "password" : "*****"
+  }
+  ]
+}

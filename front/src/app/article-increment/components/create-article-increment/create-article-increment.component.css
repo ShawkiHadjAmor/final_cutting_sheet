@@ -1,0 +1,92 @@
+/* Container styles */
+.bg-white {
+  max-width: 48rem; /* max-w-3xl */
+}
+
+/* Input container */
+.input-container {
+  margin-bottom: 1rem;
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem; /* text-sm */
+}
+
+/* Input and select styles */
+input,
+select {
+  width: 100%;
+  padding: 0.375rem 0.75rem; /* Slightly larger padding */
+  border-radius: 0.25rem;
+  border: 2px solid #e2e8f0;
+  background-color: #f7fafc;
+  font-size: 0.875rem; /* text-sm */
+  line-height: 1.25rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+}
+
+/* Button styles */
+button {
+  padding: 0.375rem 0.75rem; /* Slightly larger padding */
+  border-radius: 0.25rem;
+  font-size: 0.875rem; /* text-sm */
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  max-width: 24rem;
+  width: 100%;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 60; /* Higher than modals */
+}
+
+/* Error styles */
+.border-error {
+  border-color: #e53e3e !important;
+}
+
+.text-error {
+  color: #e53e3e;
+}

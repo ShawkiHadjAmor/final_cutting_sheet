@@ -1,0 +1,167 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.w-9 {
+  width: 2.25rem;
+}
+
+.h-9 {
+  height: 2.25rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.bg-red-500 {
+  background-color: #ef4444;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-blue-100 {
+  border-color: #dbeafe;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.w-72 {
+  width: 18rem;
+}
+
+.top-12 {
+  top: 3rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-blue-900 {
+  color: #1e3a8a;
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.text-blue-700 {
+  color: #1d4ed8;
+}
+
+.hover\:bg-blue-50:hover {
+  background-color: #eff6ff;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}
+
+/* Notification list styles */
+.notification-list {
+  max-height: 12.5rem; /* Approx 5 notifications * 2.5rem each */
+  overflow-y: auto; /* Scrollbar when content exceeds max-height */
+}
+
+/* Custom scrollbar styles */
+.notification-list::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background: #f1f5f9; /* Light blue-gray background */
+  border-radius: 0.25rem;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: #1d4ed8; /* Blue to match text-blue-700 */
+  border-radius: 0.25rem;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+  background: #2563eb; /* Lighter blue on hover */
+}
+
+/* Firefox scrollbar styles */
+.notification-list {
+  scrollbar-width: thin;
+  scrollbar-color: #1d4ed8 #f1f5f9;
+}

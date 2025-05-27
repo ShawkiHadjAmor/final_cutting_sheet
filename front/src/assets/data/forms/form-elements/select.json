@@ -1,0 +1,130 @@
+{
+  "singleSelectArray" : [
+    { "item_id": 1, "item_text": "Alaska"
+    },
+    { "item_id": 2, "item_text": "California"
+    },
+    { "item_id": 3, "item_text": "Colorado"
+    },
+    { "item_id": 4, "item_text": "New Mexico"
+    },
+    { "item_id": 5, "item_text": "Alabama"
+    },
+    { "item_id": 6, "item_text": "Connecticut"
+    },
+    { "item_id": 7, "item_text": "New York"
+    }
+  ],
+    "multipleSelectArray" : [
+      { "item_id": 1, "item_text": "Alaska"
+      },
+      { "item_id": 2, "item_text": "California"
+      },
+      { "item_id": 3, "item_text": "Colorado"
+      },
+      { "item_id": 4, "item_text": "New Mexico"
+      },
+      { "item_id": 5, "item_text": "Alabama"
+      },
+      { "item_id": 6, "item_text": "Connecticut"
+      },
+      { "item_id": 7, "item_text": "New York"
+      }
+    ],
+    "eventArray" : [
+      { "item_id": 1, "item_text": "Alaska"
+      },
+      { "item_id": 2, "item_text": "California"
+      },
+      { "item_id": 3, "item_text": "Colorado"
+      },
+      { "item_id": 4, "item_text": "New Mexico"
+      },
+      { "item_id": 5, "item_text": "Alabama"
+      },
+      { "item_id": 6, "item_text": "Connecticut"
+      },
+      { "item_id": 7, "item_text": "New York"
+      }
+    ],
+    "programmaticArray" : [
+      { "item_id": 1, "item_text": "Alaska"
+      },
+      { "item_id": 2, "item_text": "California"
+      },
+      { "item_id": 3, "item_text": "Colorado"
+      },
+      { "item_id": 4, "item_text": "New Mexico"
+      },
+      { "item_id": 5, "item_text": "Alabama"
+      },
+      { "item_id": 6, "item_text": "Connecticut"
+      },
+      { "item_id": 7, "item_text": "New York"
+      }
+    ],
+    "loadArray" : [
+      { "item_id": 1, "item_text": "Alaska"
+      },
+      { "item_id": 2, "item_text": "California"
+      },
+      { "item_id": 3, "item_text": "Colorado"
+      },
+      { "item_id": 4, "item_text": "New Mexico"
+      },
+      { "item_id": 5, "item_text": "Alabama"
+      },
+      { "item_id": 6, "item_text": "Connecticut"
+      },
+      { "item_id": 7, "item_text": "New York"
+      }
+    ],
+    "templatingArray" : [
+      { "item_id": 1, "item_text": "Alaska", "avtar": "../../../assets/images/flags/ak.png"
+      },
+      { "item_id": 2, "item_text": "California", "avtar": "../../../assets/images/flags/ca.png"
+      },
+      { "item_id": 3, "item_text": "Colorado", "avtar": "../../../assets/images/flags/co.png"
+      },
+      { "item_id": 4, "item_text": "New Mexico", "avtar": "../../../assets/images/flags/nm.png"
+      },
+      { "item_id": 5, "item_text": "Alabama", "avtar": "../../../assets/images/flags/al.png"
+      },
+      { "item_id": 6, "item_text": "Connecticut", "avtar": "../../../assets/images/flags/ct.png"
+      },
+      { "item_id": 7, "item_text": "New York", "avtar": "../../../assets/images/flags/ny.png"
+      }
+    ],
+    "singleSelect" : [
+      { "item_id": 1, "item_text": "Alaska"
+      },
+      { "item_id": 2, "item_text": "California"
+      },
+      { "item_id": 3, "item_text": "Colorado"
+      },
+      { "item_id": 4, "item_text": "New Mexico"
+      },
+      { "item_id": 5, "item_text": "Alabama"
+      },
+      { "item_id": 6, "item_text": "Connecticut"
+      },
+      { "item_id": 7, "item_text": "New York"
+      }
+    ],
+    "taggingSupportArray" : [
+      { "item_id": 1, "item_text": "Alaska"
+      },
+      { "item_id": 2, "item_text": "California"
+      },
+      { "item_id": 3, "item_text": "Colorado"
+      },
+      { "item_id": 4, "item_text": "New Mexico"
+      },
+      { "item_id": 5, "item_text": "Alabama"
+      },
+      { "item_id": 6, "item_text": "Connecticut"
+      },
+      { "item_id": 7, "item_text": "New York"
+      }
+    ]
+}

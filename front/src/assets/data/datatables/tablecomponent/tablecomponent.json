@@ -1,0 +1,20 @@
+{
+"Cities":[
+     {"item_id": 1, "item_text": "Alaska" }, 
+     { "item_id": 2, "item_text": "California" }, 
+     { "item_id": 3, "item_text": "Colorado" }, 
+     { "item_id": 4, "item_text": "New Mexico" }, 
+     { "item_id": 5, "item_text": "Alabama" },
+     { "item_id": 6, "item_text": "Connecticut" }, 
+     { "item_id": 7, "item_text": "New York" }
+    ],
+"Select":[
+    {"item_id": 1, "item_text": "Alaska" }, 
+    { "item_id": 2, "item_text": "California" }, 
+    { "item_id": 3, "item_text": "Colorado" }, 
+    { "item_id": 4, "item_text": "New Mexico" }, 
+    { "item_id": 5, "item_text": "Alabama" },
+    { "item_id": 6, "item_text": "Connecticut" }, 
+    { "item_id": 7, "item_text": "New York" }
+    ]
+}

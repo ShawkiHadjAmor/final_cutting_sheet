@@ -1,0 +1,74 @@
+{
+  "rows": [
+    {
+      "status": "Paid",
+      "statusSymbol": "success",
+      "type": "danger",
+      "value": 25,
+      "invoice": "INV-001001",
+      "name": "Elizabeth W.",
+      "products": "+954-654-564",
+      "categories": "../../../assets/images/portfolio/portfolio-2.jpg",
+      "image": "../../../../assets/images/portrait/small/avatar-s-5.png",
+      "buttonname": "Food",
+      "progressColor": "gradient-x-danger",
+      "amount": "$ 1200.00"
+    },
+    {
+      "status": "Declined",
+      "statusSymbol": "danger",
+      "type": "warning",
+      "value": 45,
+      "invoice": "INV-001002",
+      "name": " Doris R.",
+      "products": "+954-654-564",
+      "categories": "../../../assets/images/portfolio/portfolio-6.jpg",
+      "image": "../../../../assets/images/portrait/small/avatar-s-3.png",
+      "buttonname": "Electronics",
+      "progressColor": "gradient-x-warning",
+      "amount": "$ 1850.00"
+    },
+    {
+      "status": "Pending",
+      "statusSymbol": "warning",
+      "type": "success",
+      "value": 75,
+      "invoice": "INV-001003",
+      "name": "Megan S.",
+      "products": "+954-654-564",
+      "categories": "../../../assets/images/portfolio/portfolio-5.jpg",
+      "image": "../../../../assets/images/portrait/small/avatar-s-1.png",
+      "buttonname": "Groceries",
+      "progressColor": "gradient-x-success",
+      "amount": "$ 3200.00"
+    },
+    {
+      "status": "Paid",
+      "statusSymbol": "success",
+      "type": "info",
+      "value": 55,
+      "invoice": "INV-001004",
+      "name": "Andrew W.",
+      "products": "+954-654-564",
+      "categories": "../../../assets/images/portfolio/portfolio-1.jpg",
+      "image": "../../../../assets/images/portrait/small/avatar-s-2.png",
+      "buttonname": "Apparels",
+      "progressColor": "gradient-x-info",
+      "amount": "$ 4500.00"
+    },
+    {
+      "status": "Declined",
+      "statusSymbol": "success",
+      "type": "danger",
+      "value": 35,
+      "invoice": "INV-001005",
+      "name": "Walter R.",
+      "products": "+954-654-564",
+      "categories": "../../../assets/images/portfolio/portfolio-3.jpg",
+      "image": "../../../../assets/images/portrait/small/avatar-s-4.png",
+      "buttonname": "Food",
+      "progressColor": "gradient-x-danger",
+      "amount": "$ 1500.00"
+    }
+  ]
+}

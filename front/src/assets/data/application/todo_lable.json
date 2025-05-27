@@ -1,0 +1,54 @@
+{
+    "todoFilterList":[
+        {
+        "Id": 1,
+        "lableName": "Favourite",
+        "lableIcon": "ficon feather ficon feather ft-star",
+        "isSelected":true
+     },
+     {
+        "Id": 2,
+        "lableName": "Done",
+        "lableIcon": "ficon feather ft-check",
+        "isSelected":false
+     },
+     {
+        "Id": 3,
+        "lableName": "Deleted",
+        "lableIcon": "ficon feather ft-trash-2",
+        "isSelected":false
+     }
+     ],
+     "todoLableList":[
+        {
+            "Id": 1,
+            "lableName": "Frontend",
+            "isSelected":false,
+            "bulletClass":"gradient-primary"
+        },
+         {
+            "Id": 2,
+            "lableName": "Backend",
+            "isSelected":false,
+            "bulletClass":"gradient-mint"
+         },
+         {
+            "Id": 3,
+            "lableName": "Issue",
+            "isSelected":false,
+            "bulletClass":"gradient-warning"
+         },
+         {
+            "Id": 4,
+            "lableName": "Design",
+            "isSelected":false,
+            "bulletClass":"gradient-danger"
+         },
+         {
+            "Id": 5,
+            "lableName": "Wireframe",
+            "isSelected":false,
+            "bulletClass":"gradient-info"
+          }
+     ]
+}

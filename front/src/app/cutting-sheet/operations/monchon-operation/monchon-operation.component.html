@@ -1,0 +1,54 @@
+<div [formGroup]="group">
+  <div class="mb-4">
+    <label class="block text-sm font-medium">Quantité</label>
+    <input
+      type="number"
+      formControlName="quantity"
+      (change)="onQuantityChange($event)"
+      class="w-full px-4 py-2 text-sm border rounded-md"
+      placeholder="Entrez le nombre de lignes"
+      min="1"
+      [class.border-red-500]="group.get('quantity')?.touched && group.get('quantity')?.invalid"
+    />
+    <div *ngIf="group.get('quantity')?.touched && group.get('quantity')?.invalid" class="text-red-500 text-sm">
+      La quantité doit être d'au moins 1.
+    </div>
+  </div>
+
+  <div formArrayName="tables" class="mt-4" *ngIf="monchonTable">
+    <div [formGroupName]="0" class="p-4 border rounded">
+      <h3 class="font-bold mb-2">Tableau des Manchons</h3>
+      <div formArrayName="rows" class="space-y-4">
+        <div *ngFor="let row of monchonRows.controls; let j=index" [formGroupName]="j" class="p-4 border rounded">
+          <h4 class="font-bold mb-2">Ligne de Manchon {{ j + 1 }}</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium">Manchon</label>
+              <input
+                type="text"
+                formControlName="manchon"
+                class="mt-1 block w-full px-3 py-2 border rounded-md"
+                [class.border-red-500]="row.get('manchon')?.touched && row.get('manchon')?.invalid"
+              />
+              <div *ngIf="row.get('manchon')?.touched && row.get('manchon')?.invalid" class="text-red-500 text-sm">
+                Le manchon est requis.
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Quantité Unitaire</label>
+              <input
+                type="text"
+                formControlName="qteUnit"
+                class="mt-1 block w-full px-3 py-2 border rounded-md"
+                [class.border-red-500]="row.get('qteUnit')?.touched && row.get('qteUnit')?.invalid"
+              />
+              <div *ngIf="row.get('qteUnit')?.touched && row.get('qteUnit')?.invalid" class="text-red-500 text-sm">
+                La quantité unitaire est requise.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div [formGroup]="group">
+  <div class="mb-4">
+    <label class="block text-sm font-medium">Quantité</label>
+    <input
+      type="number"
+      formControlName="quantity"
+      (change)="onQuantityChange($event)"
+      class="w-full px-4 py-2 text-sm border rounded-md"
+      placeholder="Entrez la quantité"
+      min="1"
+      [class.border-red-500]="group.get('quantity')?.touched && group.get('quantity')?.invalid"
+    />
+    <div *ngIf="group.get('quantity')?.touched && group.get('quantity')?.invalid" class="text-red-500 text-sm">
+      La quantité doit être d'au moins 1.
+    </div>
+  </div>
+
+  <div formArrayName="tables" class="mt-4 space-y-4">
+    <div *ngFor="let table of tables.controls; let j=index" [formGroupName]="j" class="p-4 border rounded">
+      <h3 class="font-bold mb-2">Tableau de Câbles {{ j + 1 }}</h3>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium">Référence du Câble</label>
+          <input
+            type="text"
+            formControlName="cableRef"
+            class="mt-1 block w-full px-3 py-2 border rounded-md"
+            [class.border-red-500]="table.get('cableRef')?.touched && table.get('cableRef')?.invalid"
+          />
+          <div *ngIf="table.get('cableRef')?.touched && table.get('cableRef')?.invalid" class="text-red-500 text-sm">
+            La référence du câble est requise.
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Gauge</label>
+          <input
+            type="text"
+            formControlName="gauge"
+            class="mt-1 block w-full px-3 py-2 border rounded-md"
+            [class.border-red-500]="table.get('gauge')?.touched && table.get('gauge')?.invalid"
+          />
+          <div *ngIf="table.get('gauge')?.touched && table.get('gauge')?.invalid" class="text-red-500 text-sm">
+            Le gauge est requis.
+          </div>
+        </div>
+      </div>
+
+      <div formArrayName="columns" class="space-y-4">
+        <div *ngFor="let column of getColumnsForTable(j).controls; let i=index" [formGroupName]="i" class="border p-4 rounded">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium">Longueur</label>
+              <input
+                type="text"
+                formControlName="longueur"
+                class="mt-1 block w-full px-3 py-2 border rounded-md"
+                [class.border-red-500]="column.get('longueur')?.touched && column.get('longueur')?.invalid"
+              />
+              <div *ngIf="column.get('longueur')?.touched && column.get('longueur')?.invalid" class="text-red-500 text-sm">
+                La longueur est requise.
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Quantité Unitaire</label>
+              <input
+                type="text"
+                formControlName="quantite"
+                class="mt-1 block w-full px-3 py-2 border rounded-md"
+                [class.border-red-500]="column.get('quantite')?.touched && column.get('quantite')?.invalid"
+              />
+              <div *ngIf="column.get('quantite')?.touched && column.get('quantite')?.invalid" class="text-red-500 text-sm">
+                La quantité est requise.
+              </div>
+            </div>
+          </div>
+          <button *ngIf="i > 0" type="button" (click)="removeColumn(j, i)" class="mt-2 text-red-600 text-sm">
+            Supprimer la Colonne
+          </button>
+        </div>
+        <div *ngIf="getColumnsForTable(j).length >= maxColumns" class="text-orange-500 text-sm mt-2 flex items-center">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          Impossible d'ajouter plus de {{ maxColumns }} colonnes.
+        </div>
+        <button
+          *ngIf="getColumnsForTable(j).length < maxColumns"
+          type="button"
+          (click)="addColumn(j)"
+          class="mt-4 px-3 py-1 bg-blue-500 text-white rounded"
+        >
+          Ajouter une Colonne
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

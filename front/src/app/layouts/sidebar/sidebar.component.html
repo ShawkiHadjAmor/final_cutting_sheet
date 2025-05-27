@@ -1,0 +1,280 @@
+<nav
+  class="fixed top-0 left-0 z-40 w-72 h-screen bg-white border-r border-blue-200 transition-transform duration-300 ease-in-out md:translate-x-0"
+  [ngClass]="{'-translate-x-full': !isSidebarOpen, 'translate-x-0': isSidebarOpen}"
+>
+  <div class="flex items-center justify-center p-4 bg-blue-900 text-white h-16 border-b border-blue-800">
+    <span class="text-2xl font-bold tracking-tight">SAFRAN</span>
+  </div>
+
+  <div class="p-4 custom-scrollbar overflow-y-auto h-[calc(100vh-4rem)]">
+    <ul class="space-y-3 font-semibold">
+      <li *ngIf="hasRole('ENGINEER')">
+        <a
+          routerLink="/dashboard"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">home</span>
+          <span class="ml-3 text-base">Tableau de bord</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('ENGINEER')">
+        <a
+          (click)="toggleSubmenu('cuttingSheet')"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide cursor-pointer"
+        >
+          <span class="material-icons text-blue-600">content_cut</span>
+          <span class="ml-3 text-base">Fiche de Coupe</span>
+        </a>
+        <ul *ngIf="isCuttingSheetExpanded" class="pl-6 space-y-2 mt-1 transition-all duration-300 ease-in-out">
+          <li>
+            <a
+              routerLink="/dashboard/cutting-sheet/create"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Créer une Fiche de Coupe
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/cutting-sheet/view"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Voir Toutes les Fiches de Coupe
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/cutting-sheet/update"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Modifier Fiche de Coupe
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="hasRole('ENGINEER')">
+        <a
+          (click)="toggleSubmenu('program')"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide cursor-pointer"
+        >
+          <span class="material-icons text-blue-600">flight</span>
+          <span class="ml-3 text-base">Programme</span>
+        </a>
+        <ul *ngIf="isProgramExpanded" class="pl-6 space-y-2 mt-1 transition-all duration-300 ease-in-out">
+          <li>
+            <a
+              routerLink="/dashboard/programs/create"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Créer un Programme
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/programs/update"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Modifier un Programme
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/programs/view"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Voir Tous les Programmes
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="hasRole('ENGINEER')">
+        <a
+          (click)="toggleSubmenu('evolutions')"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide cursor-pointer"
+        >
+          <span class="material-icons text-blue-600">update</span>
+          <span class="ml-3 text-base">Évolutions</span>
+        </a>
+        <ul *ngIf="isEvolutionsExpanded" class="pl-6 space-y-2 mt-1 transition-all duration-300 ease-in-out">
+          <li>
+            <a
+              routerLink="/dashboard/evolutions/list"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Liste des Évolutions
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="hasRole('QUALITY')">
+        <a
+          (click)="toggleSubmenu('qualityEvolutions')"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide cursor-pointer"
+        >
+          <span class="material-icons text-blue-600">update</span>
+          <span class="ml-3 text-base">Évolutions</span>
+        </a>
+        <ul *ngIf="isQualityEvolutionsExpanded" class="pl-6 space-y-2 mt-1 transition-all duration-300 ease-in-out">
+          <li>
+            <a
+              routerLink="/dashboard/evolutions/create"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Créer une Évolution
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/evolutions/list"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Liste des Évolutions
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/evolutions/update"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Mettre à jour une Évolution
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="hasRole('ORDO')">
+        <a
+          (click)="toggleSubmenu('ordoEvolutions')"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide cursor-pointer"
+        >
+          <span class="material-icons text-blue-600">update</span>
+          <span class="ml-3 text-base">Évolutions ORDO</span>
+        </a>
+        <ul *ngIf="isOrdoEvolutionsExpanded" class="pl-6 space-y-2 mt-1 transition-all duration-300 ease-in-out">
+          <li>
+            <a
+              routerLink="/dashboard/evolutions/ordo-update"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Mettre à jour (ORDO)
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/evolutions/list"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Liste des Évolutions
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="hasRole('ENGINEER')">
+        <a
+          (click)="toggleSubmenu('articleIncrement')"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide cursor-pointer"
+        >
+          <span class="material-icons text-blue-600">build</span>
+          <span class="ml-3 text-base">Dernier SN</span>
+        </a>
+        <ul *ngIf="isArticleIncrementExpanded" class="pl-6 space-y-2 mt-1 transition-all duration-300 ease-in-out">
+          <li>
+            <a
+              routerLink="/dashboard/article-increment/create"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Créer un Dernier SN
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/dashboard/article-increment/list"
+              class="block p-2 text-sm text-blue-700 hover:bg-blue-50 rounded-md transition-all duration-300 ease-in-out hover-slide"
+            >
+              Voir Tous les Derniers SN
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="hasRole('ORDO')">
+        <a
+          routerLink="/dashboard/launch-of"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">play_arrow</span>
+          <span class="ml-3 text-base">Lancer des OF</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('CML')">
+        <a
+          routerLink="/dashboard/cml/view-list"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">checklist</span>
+          <span class="ml-3 text-base">CML</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('CML')">
+        <a
+          routerLink="/dashboard/cml/prepared-time"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">timer</span>
+          <span class="ml-3 text-base">Date du fin préparation</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('STOREKEEPER')">
+        <a
+          routerLink="/dashboard/store/list"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">inventory</span>
+          <span class="ml-3 text-base">Magasin</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('STOREKEEPER')">
+        <a
+          routerLink="/dashboard/store/preparation-time"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">timer</span>
+          <span class="ml-3 text-base">Temps de Préparation</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('ENGINEER') || hasRole('ORDO') || hasRole('CML')">
+        <a
+          routerLink="/dashboard/serial-numbers/list"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">tag</span>
+          <span class="ml-3 text-base">Voir les numéros de série</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('QUALITY')">
+        <a
+          routerLink="/dashboard/quality/list"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">tag</span>
+          <span class="ml-3 text-base">Archive</span>
+        </a>
+      </li>
+      <li *ngIf="hasRole('ENGINEER')">
+        <a
+          routerLink="/custom-operation"
+          target="_blank"
+          class="group flex items-center p-3 rounded-lg text-blue-900 hover:bg-blue-50 transition-all duration-300 ease-in-out hover-slide"
+        >
+          <span class="material-icons text-blue-600">tune</span>
+          <span class="ml-3 text-base">Opération Personnalisée</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <button
+    (click)="toggleSidebar()"
+    class="fixed top-4 left-4 z-50 md:hidden bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out"
+  >
+    <span class="material-icons">{{ isSidebarOpen ? 'close' : 'menu' }}</span>
+  </button>
+</nav>

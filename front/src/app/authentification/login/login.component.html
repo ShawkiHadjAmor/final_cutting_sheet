@@ -1,0 +1,77 @@
+<div class="login-page">
+  <!-- Formulaire de connexion centré -->
+  <div class="login-column">
+    <div class="login-card" [@fadeInOut]>
+      <div class="login-header">
+        <div class="logo-container">
+          <img src="assets/images/fdcc.PNG" alt="Logo FDC" class="safran-logo">
+        </div>
+        <h2 class="animated-title">
+          <span class="welcome-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </span>
+          <span style="color:#667eea;">Bienvenue</span>
+        </h2>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            placeholder="Entrez votre email">
+          <span class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            {{ getErrorMessage('email') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password"
+            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            placeholder="Entrez votre mot de passe">
+          <span class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            {{ getErrorMessage('password') }}
+          </span>
+        </div>
+
+        <button 
+          type="submit" 
+          [disabled]="loginForm.invalid || isSubmitting"
+          class="login-button">
+          <span *ngIf="!isSubmitting">Se connecter</span>
+          <div class="loader" *ngIf="isSubmitting"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal d'erreur amélioré -->
+  <div class="modal-overlay" *ngIf="errorMessage" [@modalOverlayAnimation]>
+    <div class="error-modal" [@modalAnimation]>
+      <div class="error-modal-content" role="alert">
+        <div class="error-modal-header”；">
+          <div class="error-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4"></path>
+              <circle cx="12" cy="16" r="1"></circle>
+            </svg>
+          </div>
+          <h3>Erreur</h3>
+        </div>
+        <span class="error-message">{{ errorMessage }}</span>
+        <button class="error-modal-close" (click)="errorMessage = null">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

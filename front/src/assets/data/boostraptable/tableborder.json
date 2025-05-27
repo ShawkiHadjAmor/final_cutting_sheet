@@ -1,0 +1,19 @@
+{
+  "rows": [
+    {
+      "firstname": "Mark",
+      "lastname": "Otto",
+      "username": "@mdo"
+     },
+     {
+      "firstname": "Jacob",
+      "lastname": "Thornton",
+      "username": "@fat"
+     },
+     {
+      "firstname": "Larry",
+      "lastname": "The Bird",
+      "username": "@twitter"
+     }
+  ]
+}

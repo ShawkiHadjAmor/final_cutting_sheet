@@ -1,0 +1,387 @@
+/* Container for the entire page */
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4f7fc 0%, #e2e8f0 100%);
+  position: relative; /* For modal positioning */
+}
+
+/* Sidebar with side.PNG */
+.logo-column {
+  flex: 1;
+  background-color: #f4f7fc; /* Light background to match theme */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensure image doesn’t overflow */
+}
+
+.sidebar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image fills the sidebar while maintaining aspect ratio */
+  display: block;
+}
+
+/* Login Column - Centered and Larger */
+.login-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.login-card {
+  background: white;
+  border-radius: 15px;
+  padding: 0.75rem;
+  width: 100%;
+  max-width: 600px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.login-header h2 {
+  color: #2d3748;
+  margin-bottom: 0.1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.login-form .form-group {
+  margin-bottom: 0.5rem;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 0.1rem;
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+}
+
+.login-form input.error {
+  border-color: #fc8181;
+}
+
+.login-form input::placeholder {
+  color: #a0aec0;
+}
+
+.login-form .error-message {
+  color: #e53e3e;
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+  display: block;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  background: #5a67d8;
+  transform: translateY(-2px);
+}
+
+.login-button:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+/* Animated Title */
+.animated-title {
+  color: #667eea;
+  margin-bottom: 0.1rem;
+  font-size: 1.5rem;
+  min-height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Welcome Icon */
+.welcome-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.welcome-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Logo in Login Form */
+.login-header .logo-container {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.login-header .logo-container img.safran-logo {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  display: block;
+}
+
+/* Error Modal */
+.error-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.error-modal-content {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.error-modal-message {
+  color: #e53e3e;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.error-modal-close {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.error-modal-close:hover {
+  background: #5a67d8;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .login-page {
+      flex-direction: column; /* Stack sidebar and login card vertically */
+  }
+
+  .logo-column {
+      flex: none;
+      width: 100%;
+      height: 200px; /* Fixed height for smaller screens */
+  }
+
+  .login-column {
+      flex: none;
+      width: 100%;
+      padding: 0.5rem;
+  }
+
+  .login-card {
+      padding: 0.5rem;
+      max-width: 90%;
+  }
+
+  .login-header h2 {
+      font-size: 1.25rem;
+  }
+
+  .login-form input {
+      padding: 0.4rem;
+  }
+
+  .login-button {
+      padding: 0.4rem;
+      font-size: 0.9rem;
+  }
+
+  .login-header .logo-container img.safran-logo {
+      max-height: 150px;
+  }
+
+  .welcome-icon svg {
+      width: 18px;
+      height: 18px;
+  }
+
+  .error-modal-content {
+      padding: 1rem;
+      max-width: 90%;
+  }
+}
+
+@media (max-width: 400px) {
+  .logo-column {
+      height: 150px; /* Even smaller height */
+  }
+
+  .login-card {
+      padding: 0.3rem;
+  }
+
+  .login-header h2 {
+      font-size: 1rem;
+  }
+
+  .login-header .logo-container img.safran-logo {
+      max-height: 400px; /* Note: This seems large; did you mean 40px? */
+  }
+
+  .welcome-icon svg {
+      width: 16px;
+      height: 16px;
+  }
+
+  .error-modal-message {
+      font-size: 0.9rem;
+  }
+
+  .error-modal-close {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+  }
+}
+
+/* Overlay styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal styling */
+.error-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Modal content */
+.error-modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header with icon and title */
+.error-modal-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.error-icon {
+  margin-right: 10px;
+}
+
+.error-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.error-modal-header h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+/* Error message */
+.error-message {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 1em;
+  color: #666;
+}
+
+/* Close button */
+.error-modal-close {
+  padding: 8px 16px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.error-modal-close:hover {
+  background: #5a67d8;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 500px) {
+  .error-modal {
+    max-width: 90%;
+  }
+}

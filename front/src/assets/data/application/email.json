@@ -1,0 +1,274 @@
+{
+  "Email": [
+    [
+      {
+        "emailId": 1,
+        "name": "Tonny Momery",
+        "image": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time": "4.14 AM",
+        "title": "PixInvent, I fount you...",
+        "message": "I would be good.",
+        "badge": "Family",
+        "badgeClass": "danger",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[0]"
+      }
+    ],
+    [
+      {
+        "emailId": 2,
+        "name": "Louis Wellchay",
+        "image": "../../../assets/images/portrait/small/avatar-s-2.png",
+        "time": "2.15 AM",
+        "title": "Thanks, Lets do it.",
+        "message": "Can we connect today...",
+        "badge": "",
+        "badgeClass": "",
+        "iconClass": "warning",
+        "Emailhistory": "emailArray.EmailHistory[1]"
+      }
+    ],
+    [
+      {
+        "emailId": 3,
+        "name": "Saraha Deepal",
+        "image": "../../../assets/images/portrait/small/avatar-s-3.png",
+        "time": "11.14 AM",
+        "title": "You have new comment",
+        "message": "Hi, Pixivent lets...",
+        "badge": "Work",
+        "badgeClass": "warning",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[2]"
+      }
+    ],
+    [
+      {
+        "emailId": 4,
+        "name": "Healther Howel",
+        "image": "../../../assets/images/portrait/small/avatar-s-4.png",
+        "time": "Today",
+        "title": "Project ABC Stauts ",
+        "message": "Hi! Louis Wellchy,.",
+        "badge": "Private",
+        "badgeClass": "success",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[3]"
+      }
+    ],
+    [
+      {
+        "emailId": 5,
+        "name": "Kellya Nelason",
+        "image": "../../../assets/images/portrait/small/avatar-s-5.png",
+        "time": "24 Feb",
+        "title": "Your new UI ",
+        "message": "Everything looks good",
+        "badge": "",
+        "badgeClass": "",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[4]"
+      }
+    ],
+    [
+      {
+        "emailId": 6,
+        "name": "Healther Howel",
+        "image": "../../../assets/images/portrait/small/avatar-s-6.png",
+        "time": "15 March",
+        "title": "Where are you John?",
+        "message": "We can party to night",
+        "badge": "",
+        "badgeClass": "",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[5]"
+      }
+    ],
+    [
+      {
+        "emailId": 7,
+        "name": "Healther Howel",
+        "image": "../../../assets/images/portrait/small/avatar-s-7.png",
+        "time": "5 Jan",
+        "title": "Will connect you",
+        "message": "Hi Kelly!",
+        "badge": "Friends",
+        "badgeClass": "primary",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[6]"
+      }
+    ],
+    [
+      {
+        "emailId": 8,
+        "name": "Healther Howel",
+        "image": "../../../assets/images/portrait/small/avatar-s-8.png",
+        "time": "15 March",
+        "title": "Who you are?",
+        "message": "I would be good.",
+        "badge": "",
+        "badgeClass": "",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[7]"
+      }
+    ],
+    [
+      {
+        "emailId": 9,
+        "name": "Vincent Nelson",
+        "image": "../../../assets/images/portrait/small/avatar-s-9.png",
+        "time": "8:23 AM",
+        "title": "Okey",
+        "message": "We can party to night",
+        "badge": "",
+        "badgeClass": "",
+        "iconClass": "blue-grey lighten-3",
+        "Emailhistory": "emailArray.EmailHistory[8]"
+      }
+    ]
+  ],
+  "EmailHistory": [
+    {
+      "emailId": 1,
+      "username": "Elnora Reese ",
+      "email": "elnora@gmail.com",
+      "image": "../../../assets/images/portrait/small/avatar-s-1.png",
+      "date": " 15 Jul 2019, 10:30 ",
+      "title": "to Lois Jimenez ",
+      "message": "Greetings!",
+      "descrition": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      "descrition_detail": "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+      "sender": "Sincerely yours,",
+      "iconClass": "favorite warning",
+      "image_icon1": "../../../assets/images/icons/psd.png",
+      "file_name1": "uikit-design.psd",
+      "image_icon2": "../../../assets/images/icons/sketch.png",
+      "file_name2": "uikit-design.sketch"
+    },
+    {
+      "emailId": 2,
+      "username": "Lois Jimenez ",
+      "email": "lois_jim@gmail.com",
+      "image": "../../../assets/images/portrait/small/avatar-s-19.png",
+      "date": " 10 Jul 2019, 10:30 ",
+      "title": "to Elnora Reese ",
+      "message": "Greetings!",
+      "descrition": "Successful businesses have many things in common, today we’ll look at the big ‘R’of recognition and how a digital advertising network may help. Recognition can be illustrated by two individuals entering a crowded room at a party. Both walk to the far side of the room, one of them slips through the crowd easily and unnoticed as they reach the far side.",
+      "descrition_detail": "Gummies sweet tart marzipan lemon drops donut pie. Chocolate cake gingerbread jujubes gingerbread chocolate cake tart bear claw apple pie jelly-o. Gummies biscuit brownie marshmallow oat cake tootsie roll bear claw topping. Oat cake sesame snaps icing cupcake wafer tiramisu jelly-o sugar plum carrot cake.",
+      "sender": "Sincerely yours,",
+      "sender_name": "Envato Design Team",
+      "iconClass": "favorite",
+      "image_icon1": "../../../assets/images/icons/psd.png",
+      "file_name1": "uikit-design.psd",
+      "image_icon2": "../../../assets/images/icons/sketch.png",
+      "file_name2": "uikit-design.sketch"
+    },
+    {
+      "emailId": 3,
+      "username": "Elnora Reese ",
+      "email": "elnora@gmail.com",
+      "image": "../../../assets/images/portrait/small/avatar-s-4.png",
+      "date": " 15 Jul 2019, 10:30 ",
+      "title": "to Lois Jimenez ",
+      "message": "Greetings!",
+      "descrition": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',making it look like readable English.",
+      "descrition_detail": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
+      "sender": "Sincerely yours,",
+      "sender_name": "Envato Design Team",
+      "iconClass": "favorite warning",
+      "image_icon1": "../../../assets/images/icons/psd.png",
+      "file_name1": "uikit-design.psd",
+      "image_icon2": "../../../assets/images/icons/sketch.png",
+      "file_name2": "uikit-design.sketch"
+    }
+  ],
+  "EmailMenu": [
+    {
+      "Id":1,
+      "name": "Inbox",
+      "icon": "ficon feather ft-mail",
+      "budge": "5",
+      "budgeClass": "badge badge-success badge-pill badge-round float-right",
+      "budgeIcon": true,
+      "isSelected":true
+    },
+    {
+      "Id":2,
+      "name": "Sent",
+      "icon": "ficon feather ft-play",
+      "budge": "",
+      "budgeClass": "",
+      "budgeIcon": false,
+      "isSelected":false
+    },
+    {
+      "Id":3,
+      "name": "Draft",
+      "icon": "ficon feather ft-edit-1",
+      "budge": "",
+      "budgeClass": "",
+      "budgeIcon": false,
+      "isSelected":false
+    },
+    {
+      "Id":4,
+      "name": "Starred",
+      "icon": "ficon feather ft-star",
+      "budge": "",
+      "budgeClass": "",
+      "budgeIcon": false,
+      "isSelected":false
+    },
+    {
+      "Id":5,
+      "name": "Spam",
+      "icon": "ficon feather ft-info",
+      "budge": "",
+      "budgeClass": "",
+      "budgeIcon": false,
+      "isSelected":false
+    },
+    {
+      "Id":6,
+      "name": "Trash",
+      "icon": "ficon feather ft-trash-2",
+      "budge": "3",
+      "budgeClass": "badge badge-warning badge-pill badge-round float-right",
+      "budgeIcon": true,
+      "isSelected":false
+
+    }
+  ],
+  "EmailLable": [
+    {
+      "Id":1,
+      "name": "Product",
+      "isSelected":false,
+      "bulletClass":"gradient-mint"
+    },
+    {
+      "Id":2,
+      "name": "Work",
+      "isSelected":false,
+      "bulletClass":"gradient-primary"
+    },
+    {
+      "Id":3,
+      "name": "Misc",
+      "isSelected":false,
+      "bulletClass":"gradient-warning"
+    },
+    {
+      "Id":4,
+      "name": "Family",
+      "isSelected":false,
+      "bulletClass":"gradient-danger"
+    },
+    {
+      "Id":5,
+      "name": "Design",
+      "isSelected":false,
+      "bulletClass":"gradient-info"
+    }
+  ]
+}

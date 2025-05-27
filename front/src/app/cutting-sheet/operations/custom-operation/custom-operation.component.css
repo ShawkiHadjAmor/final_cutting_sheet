@@ -1,0 +1,308 @@
+/* Base styles */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.bg-gray-100 {
+  background-color: #f3f4f6;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Sidebar */
+aside {
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  max-height: calc(100vh - 4rem);
+}
+
+aside > div {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Editable Table */
+.editable-table {
+  min-height: 120px;
+  transition: all 0.3s ease;
+  background-color: #f9fafb;
+}
+
+.cell-content {
+  position: relative;
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.cell-content:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.calculated-cell {
+  background-color: #e6f3ff;
+  border-color: #93c5fd;
+}
+
+.calculated-label {
+  position: absolute;
+  top: -10px;
+  right: 6px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: #2563eb;
+  background-color: white;
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+.calculated-label.of-calculation {
+  color: #7c3aed;
+}
+
+.selected-label {
+  position: absolute;
+  top: -10px;
+  left: 6px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: #16a34a;
+  background-color: white;
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+/* Context Menu */
+.context-menu {
+  min-width: 180px;
+  max-height: 80vh;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  border-radius: 8px;
+  overflow: visible; /* Ensure submenus aren't clipped */
+}
+
+.context-group {
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.context-heading {
+  padding: 8px 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  background-color: #f9fafb;
+  border-radius: 4px;
+  position: relative;
+  z-index: 1001; /* Ensure heading is above context menu but below submenu */
+}
+
+.context-group:last-child {
+  border-bottom: none;
+}
+
+.submenu-container {
+  position: relative;
+}
+
+.submenu-container:hover .submenu {
+  display: block;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  z-index: 1002; /* Ensure submenu is above context menu and heading */
+  padding: 4px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.submenu-container .submenu {
+  top: 0;
+  left: calc(100% + 2px); /* Slight offset to avoid overlap */
+}
+
+/* Flip to the left if submenu overflows on the right */
+.submenu-container .submenu.flip-left {
+  left: auto;
+  right: calc(100% + 2px);
+}
+
+/* Flip above if submenu overflows at the bottom */
+.submenu-container .submenu.flip-above {
+  top: auto;
+  bottom: 0;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #f3f4f6;
+}
+
+button:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Main Content */
+main {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Konva Container */
+#konvaContainer {
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: auto !important;
+}
+
+/* Modal */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Animation for Sidebar */
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.translate-x-full {
+  transform: translateX(100%);
+}
+
+.-translate-x-full {
+  transform: translateX(-100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .md\:ml-80 {
+    margin-left: 0;
+  }
+
+  .md\:w-80 {
+    width: 100%;
+  }
+
+  .md\:p-6 {
+    padding: 1rem;
+  }
+
+  #konvaContainer {
+    height: calc(100vh - 6rem) !important;
+  }
+
+  aside {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .context-menu {
+    min-width: 160px;
+    max-height: 60vh;
+  }
+
+  .submenu {
+    min-width: 120px;
+  }
+
+  .submenu-container .submenu {
+    left: 0;
+    top: 100%;
+    right: auto;
+  }
+
+  .submenu-container .submenu.flip-left {
+    left: 0;
+    right: auto;
+  }
+
+  .submenu-container .submenu.flip-above {
+    top: auto;
+    bottom: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  aside {
+    transform: translateX(0) !important;
+  }
+}
+
+/* Additional styles for better visibility */
+aside input[type="text"],
+aside input[type="number"],
+aside textarea {
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  color: #1f2937;
+}
+
+/* Scrollbar for submenu */
+.submenu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.submenu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.submenu::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.submenu::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

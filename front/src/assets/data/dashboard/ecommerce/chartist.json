@@ -1,0 +1,184 @@
+{
+  "Bar": {
+    "labels": [
+      "Jan" ,
+      "",
+      "",
+      "Apr",
+      "",
+      "",
+      "",
+      "Aug",
+      "",
+      "",
+      "",
+      "Dec"
+    ],
+    "series": [
+      [
+        1835,
+        2356,
+        1459,
+        1289,
+        1647,
+        2156,
+        1835,
+        2356,
+        1459,
+        1289,
+        1647,
+        2156
+      ]
+
+    ]
+  },
+  "lineArea": {
+    "labels": ["1st","2nd","3rd","4th","5th","6th","7th","8th"],
+    "series": [
+      [
+        0,
+        4.5,
+        2.6,
+        6.1,
+        2.6,
+        6.5,
+        3.2,
+        6.8
+        
+      ]
+    ]
+  },
+
+  "lineAreaWeek": {
+    "labels": ["W1","W2","W3","W4","W5","W6","W7","w8"],
+    "series": [
+      [
+        77,
+        18,
+        61,
+        26,
+        58,
+        32,
+        70,
+        45
+      ]
+    ]
+  },
+
+  "lineAreaMonth": {
+    "labels": ["AUG","SEP","OCT","NOV","DEC","JAN","FEB","MAR"],
+    "series": [
+      [
+        100,
+        500,
+        300,
+        700,
+        100,
+        200,
+        700,
+        50
+      ]
+    ]
+  },
+  "lineArea2": {
+    "labels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "series": [
+      [
+        0,
+        20,
+        10,
+        45,
+        20,
+        36,
+        21,
+        0
+      ],
+      [
+        0,
+        5,
+        22,
+        14,
+        32,
+        12,
+        28,
+        0
+      ]
+    ]
+  },
+
+  "donutDashboard": {
+    "series": [
+      {
+        "name": "Done",
+        "className": "ct-done",
+        "value": 23
+      },
+      {
+        "name": "Progress",
+        "className": "ct-progress",
+        "value": 14
+      },
+      {
+        "name": "Remaining",
+        "className": "ct-outstanding",
+        "value": 35
+      },
+      {
+        "name": "Started",
+        "className": "ct-started",
+        "value": 28
+      }
+    ]
+    
+  },
+
+  "LineDashboard": {
+    "labels": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
+    "series": [
+      [
+        80,
+        85,
+        75,
+        65,
+        63,
+        70,
+        82
+      ]
+    ]
+  },
+
+  "DashboardBar": {
+    "labels": [
+      "Sport",
+      "Music",
+      "Travel",
+      "News"
+    ],
+    "series": [
+      [
+        53,
+        23,
+        40,
+        30
+      ]
+    ]
+  }
+
+}

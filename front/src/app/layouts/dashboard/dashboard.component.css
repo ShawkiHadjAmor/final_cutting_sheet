@@ -1,0 +1,14 @@
+/* dashboard.component.css or styles.css */
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.bg-gray-100 {
+  background-color: #f3f4f6;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+}

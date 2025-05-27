@@ -1,0 +1,230 @@
+[
+  {
+    "uid": "",
+    "name": "Elizabeth Elliott",
+    "image": "../../../assets/images/portrait/small/avatar-s-3.png",
+     "showMessage": "Okay",
+    "isSelected": false,
+    "ChatHistory": [
+      {
+        "message": "How can we help? We're here for you!",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:18AM"
+      },
+      {
+        "message": "Hey John, I am looking for the best admin template.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-3.png",
+        "time":"3:19AM"
+      },
+      {
+        "message": "Could you please help me to find it out?",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:20AM"
+      },
+      {
+        "message": "It should be Angular 11+ Bootstrap compatible.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:20AM"
+      },
+      {
+        "message": "Absolutely!",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:22AM"
+      },
+      {
+        "message": "Modern admin is the responsive Angular 10 bootstrap admin template.",
+        "sender": 0,
+        "senderImage": "",
+        "time":"3:22AM"
+      },
+      {
+        "message": "Looks clean and fresh UI.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-3.png",
+        "time":"3:24AM"
+      },
+      {
+        "message": "It is perfect for my next project.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:24AM"
+      },
+      {
+        "message": "How can I purchase it?",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:25AM"
+      },
+      {
+        "message": "Thanks, from ThemeForest.",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:26AM"
+      },
+      {
+        "message": "I will purchase it for sure.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-3.png",
+        "time":"3:27AM"
+      },
+      {
+        "message": "Thanks.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:27AM"
+      },
+      {
+        "message": "It's my pleasure.",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:28AM"
+      }
+    ],
+    "chatHeader" :[{
+      "senderName": "Elizabeth Elliott",
+      "headerImage": "../../../assets/images/portrait/small/avatar-s-3.png"
+    }]
+  },
+  {
+    "uid": "",
+    "name": "Kristopher Candy",
+    "image": "../../../assets/images/portrait/small/avatar-s-7.png",
+
+    "showMessage": "Thank you",
+    "isSelected": false,
+    "ChatHistory": [
+      {
+        "message": "How can we help?",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:35AM"
+      },
+      {
+        "message": "Hi, I spoke with a representative yesterday.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-7.png",
+        "time":"3:36AM"
+      },
+      {
+        "message": "he gave me some steps to fix my problem.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:36AM"
+      },
+      {
+        "message": "but they didn’t help.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:37AM"
+      },
+      {
+        "message": "Ok, I will help you.",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:38AM"
+      }
+    ],
+
+    "chatHeader" :[{
+      "senderName": "Kristopher Candy",
+      "headerImage": "../../../assets/images/portrait/small/avatar-s-7.png"
+    }]
+  },
+  {
+    "uid": "",
+    "name": "Sarah Woods",
+    "image": "../../../assets/images/portrait/small/avatar-s-8.png",
+    "showMessage": "Hello krish!",
+    "isSelected": false,
+    "ChatHistory": [
+      {
+        "message": "How can we help? We're here for you!",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:10AM"
+      },
+      {
+        "message": "Hey John, I am looking for the best admin template.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-8.png",
+        "time":"3:12AM"
+      },
+      {
+        "message": "Could you please help me to find it out?",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:12AM"
+      },
+      {
+        "message": "It should be Angular 10 bootstrap compatible.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:12AM"
+      },
+      {
+        "message": "Absolutely!",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:13AM"
+      },
+      {
+        "message": "Modern admin is the responsive Angular 11+ Bootstrap admin template.",
+        "sender": 0,
+        "senderImage": "",
+        "time":"3:13AM"
+      },
+      {
+        "message": "Looks clean and fresh UI.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-8.png",
+        "time":"3:15AM"
+      },
+      {
+        "message": "It is perfect for my next project.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:15AM"
+      },
+      {
+        "message": "How can I purchase it?",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:15AM"
+      },
+      {
+        "message": "Thanks, from ThemeForest.",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:15AM"
+      },
+      {
+        "message": "I will purchase it for sure.",
+        "sender": 1,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-8.png",
+        "time":"3:17AM"
+      },
+      {
+        "message": "Thanks.",
+        "sender": 1,
+        "senderImage": "",
+        "time":"3:17AM"
+      },
+      {
+        "message": "It's my pleasure.",
+        "sender": 0,
+        "senderImage": "../../../assets/images/portrait/small/avatar-s-1.png",
+        "time":"3:18AM"
+      }
+    ],
+    "chatHeader" :[{
+      "senderName": "Sarah Woods",
+      "headerImage": "../../../assets/images/portrait/small/avatar-s-8.png"
+    }]
+  }
+
+ ]

@@ -1,0 +1,145 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+  <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+    <span class="material-icons text-blue-600 mr-2">airplanemode_active</span>
+    Créer un Programme
+  </h2>
+
+  <form [formGroup]="programmeForm" (ngSubmit)="saveProgramme()" class="space-y-4">
+    <div class="input-container">
+      <label for="name" class="text-sm font-bold text-blue-700">Nom du Programme</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        placeholder="Ex. : Programme A380"
+        title="Entrez un nom unique pour le programme (3-50 caractères, lettres, chiffres, espaces, tirets)"
+        [class.border-red-500]="programmeForm.get('name')?.touched && programmeForm.get('name')?.invalid"
+      />
+      <div *ngIf="programmeForm.get('name')?.touched && programmeForm.get('name')?.invalid" class="text-red-500 text-xs mt-1">
+        <div *ngIf="programmeForm.get('name')?.errors?.['required']">Le nom du programme est requis.</div>
+        <div *ngIf="programmeForm.get('name')?.errors?.['minlength']">Le nom doit contenir au moins 3 caractères.</div>
+        <div *ngIf="programmeForm.get('name')?.errors?.['maxlength']">Le nom ne doit pas dépasser 50 caractères.</div>
+        <div *ngIf="programmeForm.get('name')?.errors?.['pattern']">Seuls les lettres, chiffres, espaces et tirets sont autorisés.</div>
+      </div>
+    </div>
+    <div class="input-container">
+      <label for="image" class="text-sm font-bold text-blue-700">Image du Programme</label>
+      <input
+        type="file"
+        id="image"
+        (change)="onFileChange($event)"
+        class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        accept="image/jpeg,image/png"
+        title="Sélectionnez une image représentative du programme (JPEG/PNG, max 5 Mo)"
+      />
+    </div>
+    <div>
+      <h4 class="text-md font-semibold text-blue-900 mb-2">Règle d'Extraction du Numéro de Série</h4>
+      <p class="text-xs text-gray-600 mb-3">
+        Définissez le format du numéro de série (ex. : {{ dynamicSerialNumber }}). Le numéro de série doit suivre l'un des formats disponibles.
+      </p>
+      <div class="space-y-3">
+        <div class="input-container">
+          <label for="snFormat" class="text-sm font-bold text-blue-700">Format du Numéro de Série</label>
+          <select
+            id="snFormat"
+            formControlName="snFormat"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            title="Choisissez le format du numéro de série"
+          >
+            <option value="prefix-indice-increment">ZASYP/N + INDICE + INCREMENT</option>
+            <option value="increment-indice-prefix">INCREMENT + INDICE + ZASYP/N</option>
+            <option value="zasypn-increment-indice">ZASYP/N + INCREMENT + INDICE</option>
+            <option value="indice-increment-zasypn">INDICE + INCREMENT + ZASYP/N</option>
+            <option value="indice-zasypn-increment">INDICE + ZASYP/N + INCREMENT</option>
+            <option value="increment-zasypn-indice">INCREMENT + ZASYP/N + INDICE</option>
+          </select>
+          <p class="text-xs text-gray-500 mt-1">
+            Ex. : "{{ snFormatLabel }}" (ex. : {{ dynamicSerialNumber }}).
+          </p>
+        </div>
+        <div class="input-container">
+          <label for="zasypn" class="text-sm font-bold text-blue-700">ZASYP/N (Préfixe)</label>
+          <input
+            type="text"
+            id="zasypn"
+            formControlName="zasypn"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            placeholder="Ex. : ZASYP/N"
+            title="Entrez le préfixe fixe ZASYP/N (1-20 caractères)"
+            [class.border-red-500]="programmeForm.get('zasypn')?.touched && programmeForm.get('zasypn')?.invalid"
+          />
+          <div *ngIf="programmeForm.get('zasypn')?.touched && programmeForm.get('zasypn')?.invalid" class="text-red-500 text-xs mt-1">
+            <div *ngIf="programmeForm.get('zasypn')?.errors?.['required']">Le préfixe ZASYP/N est requis.</div>
+            <div *ngIf="programmeForm.get('zasypn')?.errors?.['minlength']">Le préfixe doit contenir au moins 1 caractère.</div>
+            <div *ngIf="programmeForm.get('zasypn')?.errors?.['maxlength']">Le préfixe ne doit pas dépasser 20 caractères.</div>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">
+            Ex. : Préfixe "{{ programmeForm.get('zasypn')?.value || 'ZASYP/N' }}" dans {{ dynamicSerialNumber }}.
+          </p>
+        </div>
+        <div class="input-container">
+          <label for="indice" class="text-sm font-bold text-blue-700">Indice</label>
+          <input
+            type="text"
+            id="indice"
+            formControlName="indice"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            placeholder="Ex. : A"
+            title="Entrez l'indice (1-20 caractères)"
+            [class.border-red-500]="programmeForm.get('indice')?.touched && programmeForm.get('indice')?.invalid"
+          />
+          <div *ngIf="programmeForm.get('indice')?.touched && programmeForm.get('indice')?.invalid" class="text-red-500 text-xs mt-1">
+            <div *ngIf="programmeForm.get('indice')?.errors?.['required']">L'indice est requis.</div>
+            <div *ngIf="programmeForm.get('indice')?.errors?.['minlength']">L'indice doit contenir au moins 1 caractère.</div>
+            <div *ngIf="programmeForm.get('indice')?.errors?.['maxlength']">L'indice ne doit pas dépasser 20 caractères.</div>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">
+            Ex. : Indice "{{ programmeForm.get('indice')?.value || 'ABC' }}" dans {{ dynamicSerialNumber }}.
+          </p>
+        </div>
+        <div class="mt-3 p-2 bg-blue-50 rounded-md input-container">
+          <p class="text-sm font-bold text-blue-700">Aperçu de la Règle :</p>
+          <p class="text-xs text-gray-600">{{ extractionRulePreview || 'Aucune règle définie' }}</p>
+          <p class="text-xs text-gray-500 mt-1">
+            Exemple d'extraction pour {{ dynamicSerialNumber }} : {{ getExtractionExample() }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end space-x-2 pt-4 border-t border-blue-200">
+      <button
+        type="button"
+        (click)="resetForm()"
+        class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors duration-300"
+      >
+        Réinitialiser
+      </button>
+      <button
+        type="submit"
+        [disabled]="programmeForm.invalid"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h3 class="text-lg font-bold mb-4" [ngClass]="modalMessage?.type === 'success' ? 'text-green-700' : 'text-red-700'">
+        {{ modalMessage?.type === 'success' ? 'Succès' : 'Erreur' }}
+      </h3>
+      <p class="text-gray-700 mb-6">{{ modalMessage?.text }}</p>
+      <div class="flex justify-end">
+        <button
+          (click)="closeModal()"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

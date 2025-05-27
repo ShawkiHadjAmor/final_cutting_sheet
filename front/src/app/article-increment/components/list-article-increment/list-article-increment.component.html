@@ -1,0 +1,166 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+    <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+      <span class="material-icons text-blue-600 mr-2">list</span>
+      Liste des Article Increments
+    </h2>
+  
+    <form [formGroup]="searchForm" (ngSubmit)="searchArticleIncrements()" class="mb-6 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:space-x-4">
+        <div class="input-container flex-1">
+          <label for="programId" class="text-sm font-bold text-blue-700">Programme</label>
+          <select
+            id="programId"
+            formControlName="programId"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            title="Sélectionnez un programme pour filtrer"
+          >
+            <option [ngValue]="null">Tous les programmes</option>
+            <option *ngFor="let program of programs" [ngValue]="program.id">{{ program.name }}</option>
+          </select>
+        </div>
+        <div class="input-container flex-1">
+          <label for="article" class="text-sm font-bold text-blue-700">Article</label>
+          <input
+            type="text"
+            id="article"
+            formControlName="article"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            placeholder="Rechercher par article..."
+            title="Entrez un article pour filtrer"
+          />
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        >
+          Rechercher
+        </button>
+      </div>
+    </form>
+  
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-blue-200 rounded-md">
+        <thead>
+          <tr class="bg-blue-50">
+            <th class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">ID</th>
+            <th class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">Programme</th>
+            <th class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">Article</th>
+            <th class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">Dernier Incrément</th>
+            <th class="px-4 py-2 text-left text-sm font-bold text-blue-900 border-b border-blue-200">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let increment of articleIncrements" class="hover:bg-blue-50">
+            <td class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">{{ increment.id }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">{{ getProgramName(increment.programId) }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">{{ increment.article }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">{{ increment.lastIncrement }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700 border-b border-blue-200">
+              <button
+                (click)="openUpdateModal(increment)"
+                class="px-3 py-1 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md mr-2 transition-colors duration-300"
+                title="Modifier cet article increment"
+              >
+                Modifier
+              </button>
+              
+            </td>
+          </tr>
+          <tr *ngIf="articleIncrements.length === 0">
+            <td colspan="5" class="px-4 py-2 text-sm text-gray-500 text-center">Aucun article increment trouvé.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Update Modal -->
+    <div *ngIf="showUpdateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h3 class="text-lg font-bold text-blue-900 mb-4">Modifier Article Increment</h3>
+        <form [formGroup]="updateForm" (ngSubmit)="submitUpdate()" class="space-y-4">
+          <div class="input-container">
+            <label for="updateProgramId" class="text-sm font-bold text-blue-700">Programme</label>
+            <select
+              id="updateProgramId"
+              formControlName="programId"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              title="Sélectionnez un programme"
+              [ngClass]="{'border-red-500': updateForm.get('programId')?.invalid && updateForm.get('programId')?.touched}"
+            >
+              <option [ngValue]="null" disabled>Sélectionnez un programme</option>
+              <option *ngFor="let program of programs" [ngValue]="program.id">{{ program.name }}</option>
+            </select>
+            <div *ngIf="updateForm.get('programId')?.invalid && updateForm.get('programId')?.touched" class="text-red-500 text-xs mt-1">
+              Le programme est requis.
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="updateArticle" class="text-sm font-bold text-blue-700">Article</label>
+            <input
+              type="text"
+              id="updateArticle"
+              formControlName="article"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              placeholder="Entrez l'article"
+              title="Entrez l'article"
+              [ngClass]="{'border-red-500': updateForm.get('article')?.invalid && updateForm.get('article')?.touched}"
+            />
+            <div *ngIf="updateForm.get('article')?.invalid && updateForm.get('article')?.touched" class="text-red-500 text-xs mt-1">
+              L'article est requis et ne peut pas être vide.
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="updateLastIncrement" class="text-sm font-bold text-blue-700">Dernier Incrément</label>
+            <input
+              type="number"
+              id="updateLastIncrement"
+              formControlName="lastIncrement"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              placeholder="Entrez le dernier incrément"
+              title="Entrez le dernier incrément"
+              [ngClass]="{'border-red-500': updateForm.get('lastIncrement')?.invalid && updateForm.get('lastIncrement')?.touched}"
+            />
+            <div *ngIf="updateForm.get('lastIncrement')?.invalid && updateForm.get('lastIncrement')?.touched" class="text-red-500 text-xs mt-1">
+              Le dernier incrément doit être un nombre non négatif.
+            </div>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              type="button"
+              (click)="closeUpdateModal()"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors duration-300"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              [disabled]="updateForm.invalid"
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              Mettre à jour
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Message Modal (Success/Error) -->
+    <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h3 class="text-lg font-bold mb-4" [ngClass]="modalMessage?.type === 'success' ? 'text-green-700' : 'text-red-700'">
+          {{ modalMessage?.type === 'success' ? 'Succès' : 'Erreur' }}
+        </h3>
+        <p class="text-gray-700 mb-6">{{ modalMessage?.text }}</p>
+        <div class="flex justify-end">
+          <button
+            (click)="closeModal()"
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

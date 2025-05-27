@@ -1,0 +1,135 @@
+<div [formGroup]="group">
+  <div class="mb-4">
+    <label class="block text-sm font-medium">Type</label>
+    <select formControlName="type" class="w-full px-4 py-2 text-sm border rounded-md dark:bg-gray-700 dark:text-white">
+      <option value="collier">Collier</option>
+      <option value="monchon">Manchon</option>
+    </select>
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-sm font-medium">Image Requise</label>
+    <div class="flex gap-4 mt-2">
+      <label class="inline-flex items-center">
+        <input type="radio" formControlName="imageRequired" value="yes" class="form-radio h-5 w-5 text-blue-600" />
+        <span class="ml-2">Oui</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="radio" formControlName="imageRequired" value="no" class="form-radio h-5 w-5 text-blue-600" />
+        <span class="ml-2">Non</span>
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="group.get('imageRequired')?.value === 'yes'" class="mb-6">
+    <label class="block text-sm font-medium mb-2 text-gray-700">Télécharger une Image</label>
+    <input
+      type="file"
+      (change)="onFileChange($event)"
+      class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+    />
+    <div *ngIf="group.get('image')?.value as imageValue" class="mt-4">
+      <label class="block text-sm font-medium mb-2 text-gray-700">Image Actuelle</label>
+      <div class="bg-white p-4 rounded-lg  max-w-md mx-auto border border-gray-200 transform hover:scale-105 transition-transform duration-300">
+        <img
+          [src]="imageValue"
+          alt="Image de l'Opération"
+          class="w-full h-auto rounded-md object-cover"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="group.get('imageRequired')?.value === 'no'" class="mb-4">
+    <label class="block text-sm font-medium">Quantité de Lignes</label>
+    <input
+      type="number"
+      formControlName="quantity"
+      (change)="onQuantityChange($event)"
+      (keydown.enter)="onEnterKeyPressed($event)"
+      class="w-full px-4 py-2 text-sm border rounded-md"
+      placeholder="Entrez la quantité"
+      min="1"
+      [class.border-red-500]="group.get('quantity')?.touched && group.get('quantity')?.invalid"
+    />
+    <div *ngIf="group.get('quantity')?.touched && group.get('quantity')?.invalid" class="text-red-500 text-sm">
+      La quantité doit être d'au moins 1.
+    </div>
+  </div>
+
+  <div formArrayName="tables" class="mt-4" *ngIf="laserTable">
+    <div [formGroupName]="0" class="p-4 border rounded">
+      <h3 class="font-bold mb-2">Tableau de Marquage Laser</h3>
+      <div formArrayName="rows" class="space-y-4">
+        <div *ngFor="let row of laserRows.controls; let j=index" [formGroupName]="j" class="p-4 border rounded">
+          <h4 class="font-bold mb-2">Ligne {{ j + 1 }}</h4>
+          <div class="mb-4">
+            <label class="block text-sm font-medium">Référence</label>
+            <div *ngIf="row.get('type')?.value === 'collier'">
+              <input
+                type="text"
+                formControlName="collierRef"
+                class="w-full px-4 py-2 text-sm border rounded-md dark:bg-gray-700 dark:text-white"
+                placeholder="Entrez la référence du collier"
+                [class.border-red-500]="row.get('collierRef')?.touched && row.get('collierRef')?.invalid"
+              />
+              <div *ngIf="row.get('collierRef')?.touched && row.get('collierRef')?.invalid" class="text-red-500 text-sm">
+                La référence du collier est requise.
+              </div>
+            </div>
+            <div *ngIf="row.get('type')?.value === 'monchon'">
+              <input
+                type="text"
+                formControlName="monchonRef"
+                class="w-full px-4 py-2 text-sm border rounded-md dark:bg-gray-700 dark:text-white"
+                placeholder="Entrez la référence du manchon"
+                [class.border-red-500]="row.get('monchonRef')?.touched && row.get('monchonRef')?.invalid"
+              />
+              <div *ngIf="row.get('monchonRef')?.touched && row.get('monchonRef')?.invalid" class="text-red-500 text-sm">
+                La référence du manchon est requise.
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium">Origine</label>
+              <input
+                type="text"
+                formControlName="origine"
+                class="mt-1 block w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
+                [class.border-red-500]="row.get('origine')?.touched && row.get('origine')?.invalid"
+              />
+              <div *ngIf="row.get('origine')?.touched && row.get('origine')?.invalid" class="text-red-500 text-sm">
+                L'origine est requise.
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Quantité Unitaire</label>
+              <input
+                type="text"
+                formControlName="qteUnit"
+                class="mt-1 block w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
+                [class.border-red-500]="row.get('qteUnit')?.touched && row.get('qteUnit')?.invalid"
+              />
+              <div *ngIf="row.get('qteUnit')?.touched && row.get('qteUnit')?.invalid" class="text-red-500 text-sm">
+                La quantité unitaire est requise.
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Programme LASER</label>
+              <input
+                type="text"
+                formControlName="programmeLaser"
+                class="mt-1 block w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white"
+                [class.border-red-500]="row.get('programmeLaser')?.touched && row.get('programmeLaser')?.invalid"
+              />
+              <div *ngIf="row.get('programmeLaser')?.touched && row.get('programmeLaser')?.invalid" class="text-red-500 text-sm">
+                Le programme LASER est requis.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

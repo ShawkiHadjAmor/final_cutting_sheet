@@ -1,0 +1,48 @@
+{
+  "sales": 
+     [
+  {
+    "name": "Today",
+    "sales": "$250.00",
+    "receipts": "$200.00",
+    "due": "$50.00"
+  },
+  {
+    "name": "This Week",
+    "sales": "$450.00",
+    "receipts": "$300.00",
+    "due": "$150.00"
+  },
+  {
+    "name": "This Month",
+    "sales": "$800",
+    "receipts": "$600.00",
+    "due": "$200.00"
+  },
+  {
+    "name": "This Quarter",
+    "sales": "$1200.00",
+    "receipts": "$950.00",
+    "due": "$250.00"
+  },
+  {
+    "name": "This Year",
+    "sales": "$1500.00",
+    "receipts": "$1200.00",
+    "due": "$300.00"
+  }
+],
+"TotalSales":{
+ "TotalSales":[
+[1000, 1800, 1200, 0, 2000, 1500, 700, 900, 1600, 1400, 1550, 1800]
+]},
+"TotalReceipts":{
+ "TotalReceipts":[
+[850, 1650, 1000, 0, 1850, 1350, 450, 0, 1500, 900, 1250, 1500]
+]},
+"TotalExpenses":{
+ "TotalExpenses":[
+[50, 150, 100, 10, 850, 350, 0, 60, 250, 90, 120, 230]
+]}
+ }
+  

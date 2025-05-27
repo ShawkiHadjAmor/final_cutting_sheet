@@ -1,0 +1,52 @@
+{
+    "lineArea": {
+      "labels": ["Mon","Tue","Wed","Thu","Fri","Sat","Sun","Mon"],
+    "series": [
+      [5000, 10000, 4000, 14500, 8000, 18500, 8000, 20000],
+      [7000, 15000, 6000, 10500, 3000, 11500, 4000, 10000]
+    ]
+  },
+
+  "earningchart": {
+    "series": [
+      [23, 30, 31, 43, 41, 37, 53]
+    ]
+  },
+  "donut1": {
+    "series": [
+        18,
+        82
+      ]
+  },
+  "donut2": {
+    "series": [
+        24,
+        76
+      ]
+  },
+
+  "donutDashboard": {
+    "series": [
+      {
+        "name": "done",
+        "className": "ct-done",
+        "value": 23
+      },
+      {
+        "name": "progress",
+        "className": "ct-progress",
+        "value": 14
+      },
+      {
+        "name": "outstanding",
+        "className": "ct-outstanding",
+        "value": 35
+      },
+      {
+        "name": "started",
+        "className": "ct-started",
+        "value": 28
+      }
+    ]
+  }
+}

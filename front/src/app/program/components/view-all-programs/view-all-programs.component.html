@@ -1,0 +1,78 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+  <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+    <span class="material-icons text-blue-600 mr-2">airplanemode_active</span>
+    Liste des Programmes
+  </h2>
+
+  <div *ngIf="programmes.length > 0; else noData" class="card-container">
+    <div *ngFor="let programme of programmes" class="card" >
+      <div class="flex items-center justify-between mb-2">
+        <h3>{{ programme.name }}</h3>
+        <button
+          (click)="confirmDelete(programme); $event.stopPropagation()"
+          class="delete-icon"
+          title="Supprimer le programme"
+        >
+          <span class="material-icons">delete</span>
+        </button>
+      </div>
+      <div>
+        <img
+          *ngIf="programme.imageUrl"
+          [src]="programme.imageUrl"
+          alt="{{ programme.name }}"
+          class="w-full h-40 object-cover rounded-md mb-2"
+          (error)="onImageError(programme)"
+        />
+        <p *ngIf="!programme.imageUrl" class="text-gray-500 text-sm italic">Aucune image disponible</p>
+        <p class="text-sm text-gray-600">
+          <span class="font-medium">Règle d'extraction SN CML :</span>
+          {{ programme.extractionRuleDisplay }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <ng-template #noData>
+    <p class="text-center py-6 text-blue-600 text-lg font-medium">Aucun programme trouvé.</p>
+  </ng-template>
+
+  <div *ngIf="showDeleteModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 class="text-lg font-bold text-red-700 mb-4">Confirmer la Suppression</h3>
+      <p class="text-gray-700 mb-6">
+        Êtes-vous sûr de vouloir supprimer le programme "{{ programmeToDelete?.name }}" ? Cette action est irréversible.
+      </p>
+      <div class="flex justify-end space-x-2">
+        <button
+          (click)="closeDeleteModal()"
+          class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors duration-300"
+        >
+          Annuler
+        </button>
+        <button
+          (click)="deleteProgramme()"
+          class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-300"
+        >
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showMessageModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 class="text-lg font-bold mb-4" [ngClass]="modalMessage?.type === 'success' ? 'text-green-700' : 'text-red-700'">
+        {{ modalMessage?.type === 'success' ? 'Succès' : 'Erreur' }}
+      </h3>
+      <p class="text-gray-700 mb-6">{{ modalMessage?.text }}</p>
+      <div class="flex justify-end">
+        <button
+          (click)="closeMessageModal()"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

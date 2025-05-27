@@ -1,0 +1,147 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+  <div *ngIf="isLoading" class="loading-overlay">
+    <img src="/assets/loading.gif" alt="Loading" class="loading-spinner" />
+  </div>
+  <div *ngIf="!showDetails">
+    <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+      <span class="material-icons text-blue-600 mr-2">edit</span>
+      Mise à Jour ORDO des Évolutions
+    </h2>
+
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-blue-700 mb-2">Filtres</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label for="searchId" class="text-sm font-bold text-blue-700">Numéro d'Évolution</label>
+          <input
+            id="searchId"
+            [(ngModel)]="searchId"
+            (input)="applyFilters()"
+            type="text"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400"
+            placeholder="Rechercher par numéro"
+          />
+        </div>
+        <div>
+          <label for="searchArticle" class="text-sm font-bold text-blue-700">Article</label>
+          <input
+            id="searchArticle"
+            [(ngModel)]="searchArticle"
+            (input)="applyFilters()"
+            type="text"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400"
+            placeholder="Rechercher par article"
+          />
+        </div>
+        <div>
+          <label for="searchProgramme" class="text-sm font-bold text-blue-700">Programme</label>
+          <input
+            id="searchProgramme"
+            [(ngModel)]="searchProgramme"
+            (input)="applyFilters()"
+            type="text"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400"
+            placeholder="Rechercher par programme"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center text-blue-600">Chargement...</div>
+    <div *ngIf="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px;">
+      <div *ngFor="let evolution of filteredEvolutions" class="card">
+        <h2>Évolution {{ evolution.id }}</h2>
+        <span class="material-icons update-icon" (click)="openDetails(evolution)">edit</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showDetails && selectedEvolution" class="details-view">
+    <div class="details-card">
+      <h3 class="details-title">Mise à Jour de l'Évolution {{ selectedEvolution.id }}</h3>
+      <form [formGroup]="evolutionForm" (ngSubmit)="saveEvolution()" class="space-y-4">
+        <div class="details-sections">
+          <div class="details-left">
+            <p><span class="label">ID:</span> {{ selectedEvolution.id }}</p>
+            <p><span class="label">Programme:</span> {{ selectedEvolution.programName || 'Pas encore' }}</p>
+            <p><span class="label">Article:</span> {{ selectedEvolution.article || 'Pas encore' }}</p>
+          </div>
+          <div class="details-right">
+            <p><span class="label">Raison:</span> {{ selectedEvolution.reason || 'Pas encore' }}</p>
+            <p><span class="label">SN/OF Bloqué:</span> {{ getBlockedValue(selectedEvolution) }}</p>
+            <p><span class="label">Commentaire ORDO:</span> {{ selectedEvolution.ordoComment || 'Pas encore' }}</p>
+          </div>
+        </div>
+        <div class="details-sections">
+          <div class="details-left">
+            <p><span class="label">Créé par:</span> {{ selectedEvolution.createdBy || 'Pas encore' }}</p>
+            <p><span class="label">Créé le:</span> {{ selectedEvolution.createdAt ? (selectedEvolution.createdAt | date:'short') : 'Pas encore' }}</p>
+            <p><span class="label">Clôturé par:</span> {{ selectedEvolution.closedBy || 'Pas encore' }}</p>
+          </div>
+          <div class="details-right">
+            <p><span class="label">Clôturé le:</span> {{ selectedEvolution.closedAt ? (selectedEvolution.closedAt | date:'short') : 'Pas encore' }}</p>
+            <p><span class="label">Résolu par:</span> {{ selectedEvolution.resolvedBy || 'Pas encore' }}</p>
+            <p><span class="label">Résolu le:</span> {{ selectedEvolution.resolvedAt ? (selectedEvolution.resolvedAt | date:'short') : 'Pas encore' }}</p>
+            <p><span class="label">Statut:</span> <span [ngClass]="selectedEvolution.active ? 'status-active' : 'status-resolved'">{{ selectedEvolution.active ? 'Active' : 'Résolue' }}</span></p>
+          </div>
+        </div>
+        <div class="input-section">
+          <div class="input-container">
+            <label for="futureIncrement" class="label"> {{ hasLastIncrement ? 'SN bloqué' : 'Numéro d\'OF bloqué' }}</label>
+            <input
+              id="futureIncrement"
+              formControlName="futureIncrement"
+              type="text"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400"
+              [placeholder]="hasLastIncrement ? 'Entrez le SN bloqué' : 'Entrez le numéro d\'OF bloqué'"
+              [class.border-red-500]="evolutionForm.get('futureIncrement')?.touched && evolutionForm.get('futureIncrement')?.invalid"
+            />
+            <div *ngIf="evolutionForm.get('futureIncrement')?.touched && evolutionForm.get('futureIncrement')?.invalid" class="text-red-500 text-xs mt-1">
+              <div *ngIf="evolutionForm.get('futureIncrement')?.errors?.['minlength']">
+                {{ hasLastIncrement ? 'Le SN bloqué' : 'Le numéro d\'OF bloqué' }} doit contenir au moins 1 caractère.
+              </div>
+              <div *ngIf="evolutionForm.get('futureIncrement')?.errors?.['maxlength']">
+                {{ hasLastIncrement ? 'Le SN bloqué' : 'Le numéro d\'OF bloqué' }} ne doit pas dépasser 50 caractères.
+              </div>
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="ordoComment" class="label">Commentaire ORDO</label>
+            <textarea
+              id="ordoComment"
+              formControlName="ordoComment"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400"
+              placeholder="Entrez un commentaire (optionnel)"
+              rows="4"
+              [class.border-red-500]="evolutionForm.get('ordoComment')?.touched && evolutionForm.get('ordoComment')?.invalid"
+            ></textarea>
+            <div *ngIf="evolutionForm.get('ordoComment')?.touched && evolutionForm.get('ordoComment')?.invalid" class="text-red-500 text-xs mt-1">
+              <div *ngIf="evolutionForm.get('ordoComment')?.errors?.['maxlength']">Le commentaire ne doit pas dépasser 500 caractères.</div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="modalMessage" class="message" [ngClass]="modalMessage?.type === 'success' ? 'text-green-700' : 'text-red-700'">
+          {{ modalMessage?.text }}
+        </div>
+        <div class="details-actions">
+          <button
+            type="submit"
+            [disabled]="evolutionForm.invalid || isLoading"
+            class="action-button action-button-blue"
+          >
+            Enregistrer
+          </button>
+          <button
+            type="button"
+            (click)="closeDetails()"
+            class="action-button action-button-gray"
+          >
+            Retour
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

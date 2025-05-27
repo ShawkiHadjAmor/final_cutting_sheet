@@ -1,0 +1,1328 @@
+now here <div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+  <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+    <span class="material-icons text-blue-600 mr-2">build</span>
+    Créer un Article Increment
+  </h2>
+
+  <form [formGroup]="articleIncrementForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="input-container">
+      <label for="programId" class="text-sm font-bold text-blue-700">Programme</label>
+      <select
+        id="programId"
+        formControlName="programId"
+        class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        title="Sélectionnez un programme"
+        [class.border-red-500]="articleIncrementForm.get('programId')?.touched && articleIncrementForm.get('programId')?.invalid"
+      >
+        <option [ngValue]="null" disabled>Sélectionnez un programme</option>
+        <option *ngFor="let program of programs" [ngValue]="program.id">{{ program.name }}</option>
+      </select>
+      <div *ngIf="articleIncrementForm.get('programId')?.touched && articleIncrementForm.get('programId')?.invalid" class="text-red-500 text-xs mt-1">
+        <div *ngIf="articleIncrementForm.get('programId')?.errors?.['required']">Le programme est requis.</div>
+      </div>
+    </div>
+    <div class="input-container">
+      <label for="article" class="text-sm font-bold text-blue-700">Article</label>
+      <input
+        type="text"
+        id="article"
+        formControlName="article"
+        class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        placeholder="Ex. : Article-001"
+        title="Entrez un nom d'article unique (1-50 caractères, lettres, chiffres, espaces, tirets)"
+        [class.border-red-500]="articleIncrementForm.get('article')?.touched && articleIncrementForm.get('article')?.invalid"
+      />
+      <div *ngIf="articleIncrementForm.get('article')?.touched && articleIncrementForm.get('article')?.invalid" class="text-red-500 text-xs mt-1">
+        <div *ngIf="articleIncrementForm.get('article')?.errors?.['required']">L'article est requis.</div>
+        <div *ngIf="articleIncrementForm.get('article')?.errors?.['minlength']">L'article doit contenir au moins 1 caractère.</div>
+        <div *ngIf="articleIncrementForm.get('article')?.errors?.['maxlength']">L'article ne doit pas dépasser 50 caractères.</div>
+        <div *ngIf="articleIncrementForm.get('article')?.errors?.['pattern']">Seuls les lettres, chiffres, espaces et tirets sont autorisés.</div>
+      </div>
+    </div>
+    <div class="input-container">
+      <label for="lastIncrement" class="text-sm font-bold text-blue-700">Dernier Incrément</label>
+      <input
+        type="number"
+        id="lastIncrement"
+        formControlName="lastIncrement"
+        class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        placeholder="Ex. : 100"
+        title="Entrez le dernier incrément utilisé (0-999999)"
+        min="0"
+        max="999999"
+        [class.border-red-500]="articleIncrementForm.get('lastIncrement')?.touched && articleIncrementForm.get('lastIncrement')?.invalid"
+      />
+      <div *ngIf="articleIncrementForm.get('lastIncrement')?.touched && articleIncrementForm.get('lastIncrement')?.invalid" class="text-red-500 text-xs mt-1">
+        <div *ngIf="articleIncrementForm.get('lastIncrement')?.errors?.['required']">L'incrément est requis.</div>
+        <div *ngIf="articleIncrementForm.get('lastIncrement')?.errors?.['min']">L'incrément doit être supérieur ou égal à 0.</div>
+        <div *ngIf="articleIncrementForm.get('lastIncrement')?.errors?.['max']">L'incrément ne doit pas dépasser 999999.</div>
+      </div>
+      <p class="text-xs text-gray-500 mt-1">
+        Ex. : Dernier incrément "{{ articleIncrementForm.get('lastIncrement')?.value || '100' }}" utilisé pour générer les numéros de série.
+      </p>
+    </div>
+    <div class="flex justify-end space-x-2 pt-4 border-t border-blue-200">
+      <button
+        type="button"
+        (click)="resetForm()"
+        class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors duration-300"
+      >
+        Réinitialiser
+      </button>
+      <button
+        type="submit"
+        [disabled]="articleIncrementForm.invalid"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </form>
+
+  <!-- Confirmation Modal -->
+  <div *ngIf="showConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h3 class="text-lg font-bold text-blue-900 mb-4">Confirmation</h3>
+      <p class="text-gray-700 mb-6">Vous êtes sûr de cet incrément ?</p>
+      <div class="flex justify-end space-x-2">
+        <button
+          (click)="cancelSave()"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-300"
+        >
+          Annuler
+        </button>
+        <button
+          (click)="confirmSave()"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        >
+          Continuer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success/Error Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h3 class="text-lg font-bold mb-4" [ngClass]="modalMessage?.type === 'success' ? 'text-green-700' : 'text-red-700'">
+        {{ modalMessage?.type === 'success' ? 'Succès' : 'Erreur' }}
+      </h3>
+      <p class="text-gray-700 mb-6">{{ modalMessage?.text }}</p>
+      <div class="flex justify-end">
+        <button
+          (click)="closeModal()"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div> import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ArticleIncrementService } from '../../service/article-increment.service';
+import { Program, ProgramService } from 'src/app/program/service/program.service';
+
+@Component({
+selector: 'app-create-article-increment',
+templateUrl: './create-article-increment.component.html',
+styleUrls: ['./create-article-increment.component.css']
+})
+export class CreateArticleIncrementComponent implements OnInit {
+articleIncrementForm: FormGroup;
+programs: Program[] = [];
+showModal: boolean = false;
+showConfirmModal: boolean = false;
+modalMessage: { type: 'success' | 'error', text: string } | null = null;
+
+constructor(
+  private fb: FormBuilder,
+  private articleIncrementService: ArticleIncrementService,
+  private programService: ProgramService
+) {
+  this.articleIncrementForm = this.fb.group({
+    programId: [null, Validators.required],
+    article: ['', [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(50),
+      Validators.pattern(/^[a-zA-Z0-9\s\-]+$/)
+    ]],
+    lastIncrement: [0, [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(999999)
+    ]]
+  });
+}
+
+ngOnInit(): void {
+  this.fetchPrograms();
+}
+
+fetchPrograms(): void {
+  this.programService.getAllProgrammes().subscribe({
+    next: (programs) => {
+      this.programs = programs;
+    },
+    error: (error) => {
+      console.error('Erreur lors du chargement des programmes:', error);
+      this.showModalMessage('error', error.message || 'Échec du chargement des programmes.');
+    }
+  });
+}
+
+onSubmit(): void {
+  if (this.articleIncrementForm.valid) {
+    // Show confirmation modal instead of saving directly
+    this.showConfirmModal = true;
+  } else {
+    console.log('Form invalid:', this.articleIncrementForm.errors, this.articleIncrementForm.value);
+    this.showModalMessage('error', 'Veuillez remplir correctement tous les champs requis.');
+  }
+}
+
+confirmSave(): void {
+  this.showConfirmModal = false;
+  const articleIncrement = this.articleIncrementForm.value;
+  console.log('Submitting article increment:', articleIncrement);
+  this.articleIncrementService.createArticleIncrement(articleIncrement).subscribe({
+    next: () => {
+      this.showModalMessage('success', 'Article increment créé avec succès !');
+      setTimeout(() => this.resetForm(), 2000);
+    },
+    error: (error) => {
+      console.error('Erreur lors de la création de l\'article increment:', error);
+      this.showModalMessage('error', error.message || 'Échec de la création de l\'article increment.');
+    }
+  });
+}
+
+cancelSave(): void {
+  this.showConfirmModal = false;
+}
+
+resetForm(): void {
+  this.articleIncrementForm.reset({
+    programId: null,
+    article: '',
+    lastIncrement: 0
+  });
+  this.closeModal();
+}
+
+showModalMessage(type: 'success' | 'error', text: string): void {
+  this.modalMessage = { type, text };
+  this.showModal = true;
+}
+
+closeModal(): void {
+  this.showModal = false;
+  this.modalMessage = null;
+}
+} import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthService } from 'src/app/authentification/service/auth.service';
+import { environment } from 'src/environments/environment';
+
+export interface ArticleIncrement {
+id?: number;
+programId: number;
+article: string;
+lastIncrement: number;
+}
+
+@Injectable({
+providedIn: 'root'
+})
+export class ArticleIncrementService {
+private apiUrl = `${environment.apiUrl}/article-increments`;
+
+constructor(
+  private http: HttpClient,
+  private authService: AuthService
+) {}
+
+getAllArticleIncrements(): Observable<ArticleIncrement[]> {
+  return this.http.get<ArticleIncrement[]>(this.apiUrl, { headers: this.authService.getHeaders() }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+getArticleIncrementById(id: number): Observable<ArticleIncrement> {
+  return this.http.get<ArticleIncrement>(`${this.apiUrl}/${id}`, { headers: this.authService.getHeaders() }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+createArticleIncrement(articleIncrement: ArticleIncrement): Observable<ArticleIncrement> {
+  return this.http.post<ArticleIncrement>(this.apiUrl, articleIncrement, { headers: this.authService.getHeaders() }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+updateArticleIncrement(id: number, articleIncrement: ArticleIncrement): Observable<ArticleIncrement> {
+  return this.http.put<ArticleIncrement>(`${this.apiUrl}/${id}`, articleIncrement, { headers: this.authService.getHeaders() }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+deleteArticleIncrement(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.authService.getHeaders() }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+searchArticleIncrements(programId?: number, article?: string): Observable<ArticleIncrement[]> {
+  let url = `${this.apiUrl}/search`;
+  const params: { [key: string]: string } = {};
+  if (programId) params['programId'] = programId.toString();
+  if (article) params['article'] = article;
+  return this.http.get<ArticleIncrement[]>(url, { headers: this.authService.getHeaders(), params }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+private handleError(error: HttpErrorResponse): Observable<never> {
+  let errorMessage = 'Une erreur est survenue. Veuillez réessayer plus tard.';
+  if (error.error instanceof ErrorEvent) {
+    errorMessage = `Erreur: ${error.error.message}`;
+  } else {
+    errorMessage = error.error?.message || `Code: ${error.status}, Message: ${error.message}`;
+  }
+  return throwError(() => new Error(errorMessage));
+}
+} package com.backend.cuttingsheet.controller;
+
+import com.backend.cuttingsheet.entity.ArticleIncrement;
+import com.backend.cuttingsheet.entity.App_user;
+import com.backend.cuttingsheet.interfaces.IArticleIncrementApi;
+import com.backend.cuttingsheet.repository.ArticleIncrementRepository;
+import com.backend.cuttingsheet.repository.ProgramRepository;
+import com.backend.cuttingsheet.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
+public class ArticleIncrementController implements IArticleIncrementApi {
+  private static final Logger logger = LoggerFactory.getLogger(ArticleIncrementController.class);
+
+  @Autowired
+  private ArticleIncrementRepository repository;
+
+  @Autowired
+  private ProgramRepository programRepository;
+
+  @Autowired
+  private UserRepository userRepository;
+
+  private void validateArticleIncrement(ArticleIncrement articleIncrement) {
+      if (articleIncrement.getProgramId() == null) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Program ID is required");
+      }
+      if (!programRepository.existsById(articleIncrement.getProgramId())) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Program does not exist");
+      }
+      if (articleIncrement.getArticle() == null || articleIncrement.getArticle().trim().isEmpty()) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Article is required");
+      }
+      if (articleIncrement.getLastIncrement() == null || articleIncrement.getLastIncrement() < 0) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Last increment must be non-negative");
+      }
+  }
+
+  @PreAuthorize("hasRole('ENGINEER')")
+  @Override
+  public ArticleIncrement createArticleIncrement(ArticleIncrement articleIncrement) {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      logger.info("Creating article increment for program ID: {} and article: {} by user: {}",
+          articleIncrement.getProgramId(), articleIncrement.getArticle(), auth != null ? auth.getName() : "none");
+
+      validateArticleIncrement(articleIncrement);
+
+      Optional<ArticleIncrement> existing = repository.findByProgramIdAndArticle(
+          articleIncrement.getProgramId(), articleIncrement.getArticle().trim());
+      if (existing.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "Article increment for this program and article exists");
+      }
+
+      if (auth == null) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+      }
+      App_user user = userRepository.findByEmail(auth.getName());
+      if (user == null) {
+          logger.error("User not found for username: {}", auth.getName());
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+      }
+
+      ArticleIncrement newIncrement = new ArticleIncrement();
+      newIncrement.setProgramId(articleIncrement.getProgramId());
+      newIncrement.setArticle(articleIncrement.getArticle().trim());
+      newIncrement.setLastIncrement(articleIncrement.getLastIncrement());
+
+      ArticleIncrement savedIncrement = repository.save(newIncrement);
+      logger.info("Created article increment ID: {}", savedIncrement.getId());
+      return savedIncrement;
+  }
+
+  @PreAuthorize("hasRole('ENGINEER')")
+  @Override
+  public ArticleIncrement updateArticleIncrement(Long id, ArticleIncrement articleIncrement) {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      logger.info("Updating article increment ID: {} by user: {}", id, auth != null ? auth.getName() : "none");
+
+      Optional<ArticleIncrement> incrementOptional = repository.findById(id);
+      if (!incrementOptional.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article increment not found");
+      }
+      ArticleIncrement existingIncrement = incrementOptional.get();
+
+      validateArticleIncrement(articleIncrement);
+
+      Optional<ArticleIncrement> existingWithSameKeys = repository.findByProgramIdAndArticle(
+          articleIncrement.getProgramId(), articleIncrement.getArticle().trim());
+      if (existingWithSameKeys.isPresent() && !existingWithSameKeys.get().getId().equals(id)) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "Another article increment with this program and article exists");
+      }
+
+      if (auth == null) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+      }
+      App_user user = userRepository.findByEmail(auth.getName());
+      if (user == null) {
+          logger.error("User not found for username: {}", auth.getName());
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+      }
+
+      existingIncrement.setProgramId(articleIncrement.getProgramId());
+      existingIncrement.setArticle(articleIncrement.getArticle().trim());
+      existingIncrement.setLastIncrement(articleIncrement.getLastIncrement());
+
+      ArticleIncrement updatedIncrement = repository.save(existingIncrement);
+      logger.info("Updated article increment ID: {}", updatedIncrement.getId());
+      return updatedIncrement;
+  }
+
+  @Override
+  public ArticleIncrement getArticleIncrementById(Long id) {
+      logger.info("Fetching article increment ID: {}", id);
+      Optional<ArticleIncrement> incrementOptional = repository.findById(id);
+      if (!incrementOptional.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article increment not found");
+      }
+      return incrementOptional.get();
+  }
+
+  @Override
+  public List<ArticleIncrement> getAllArticleIncrements() {
+      logger.info("Fetching all article increments");
+      return repository.findAll();
+  }
+
+  @PreAuthorize("hasRole('ENGINEER')")
+  @Override
+  public void deleteArticleIncrement(Long id) {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      logger.info("Deleting article increment ID: {} by user: {}", id, auth != null ? auth.getName() : "none");
+
+      Optional<ArticleIncrement> incrementOptional = repository.findById(id);
+      if (!incrementOptional.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article increment not found");
+      }
+
+      if (auth == null) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+      }
+      App_user user = userRepository.findByEmail(auth.getName());
+      if (user == null) {
+          logger.error("User not found for username: {}", auth.getName());
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+      }
+
+      repository.delete(incrementOptional.get());
+      logger.info("Deleted article increment ID: {}", id);
+  }
+
+  @Override
+  public List<ArticleIncrement> searchArticleIncrements(Long programId, String article) {
+      logger.info("Searching article increments with programId: {}, article: {}", programId, article);
+      List<ArticleIncrement> increments = repository.findAll();
+      if (programId != null) {
+          increments = increments.stream()
+              .filter(ai -> ai.getProgramId().equals(programId))
+              .collect(Collectors.toList());
+      }
+      if (article != null && !article.trim().isEmpty()) {
+          String articleLower = article.trim().toLowerCase();
+          increments = increments.stream()
+              .filter(ai -> ai.getArticle().toLowerCase().contains(articleLower))
+              .collect(Collectors.toList());
+      }
+      return increments;
+  }
+} package com.backend.cuttingsheet.controller;
+
+import com.backend.cuttingsheet.entity.Program;
+import com.backend.cuttingsheet.entity.App_user;
+import com.backend.cuttingsheet.interfaces.IProgramApi;
+import com.backend.cuttingsheet.repository.ProgramRepository;
+import com.backend.cuttingsheet.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+public class ProgramController implements IProgramApi {
+  private static final Logger logger = LoggerFactory.getLogger(ProgramController.class);
+  private static final long MAX_IMAGE_SIZE = 16 * 1024 * 1024; 
+
+  @Value("${upload.dir}")
+  private String UPLOAD_DIR;
+
+  @Autowired
+  private ProgramRepository repository;
+
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  private void validateExtractionRule(String extractionRule) {
+      if (extractionRule == null || extractionRule.trim().isEmpty()) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Extraction rule is required and cannot be empty");
+      }
+      try {
+          JsonNode ruleNode = objectMapper.readTree(extractionRule);
+          if (!ruleNode.has("snFormat") || !ruleNode.has("zasypn") || !ruleNode.has("indice")) {
+              throw new IllegalArgumentException("Missing required fields (snFormat, zasypn, indice)");
+          }
+          String snFormat = ruleNode.get("snFormat").asText();
+          List<String> validFormats = Arrays.asList(
+              "prefix-indice-increment", "increment-indice-prefix", "zasypn-increment-indice",
+              "indice-increment-zasypn", "indice-zasypn-increment", "increment-zasypn-indice"
+          );
+          if (!validFormats.contains(snFormat)) {
+              throw new IllegalArgumentException("Invalid snFormat: Must be one of " + validFormats);
+          }
+          String zasypn = ruleNode.get("zasypn").asText();
+          String indice = ruleNode.get("indice").asText();
+          if (zasypn.isEmpty() || zasypn.length() > 20) {
+              throw new IllegalArgumentException("ZASYP/N must be non-empty and <= 20 characters");
+          }
+          if (indice.isEmpty() || indice.length() > 20) {
+              throw new IllegalArgumentException("INDICE must be non-empty and <= 20 characters");
+          }
+      } catch (Exception e) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid extraction rule: " + e.getMessage());
+      }
+  }
+
+  private void validateImageSize(MultipartFile image) {
+      if (image != null && !image.isEmpty() && image.getSize() > MAX_IMAGE_SIZE) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image size exceeds maximum limit of 16MB");
+      }
+  }
+
+  private String saveImage(MultipartFile image) throws IOException {
+      String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+      File uploadDir = new File(UPLOAD_DIR);
+      if (!uploadDir.exists()) {
+          uploadDir.mkdirs();
+      }
+      File dest = new File(uploadDir, fileName);
+      logger.debug("Saving image to: {}", dest.getAbsolutePath());
+      image.transferTo(dest);
+      return "/uploads/programs/" + fileName;
+  }
+
+  @PreAuthorize("hasRole('ENGINEER')")
+  @Override
+  public Program createProgram(String name, MultipartFile image, String extractionRule) throws IOException {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      logger.info("Creating program: {} by user: {}", name, auth != null ? auth.getName() : "none");
+      logger.debug("Received extractionRule: {}", extractionRule);
+
+      if (name == null || name.trim().isEmpty()) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Program name is required");
+      }
+      if (repository.findByName(name.trim()).isPresent()) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "Program with name exists");
+      }
+      validateExtractionRule(extractionRule);
+      validateImageSize(image);
+
+      if (auth == null) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+      }
+      App_user user = userRepository.findByEmail(auth.getName());
+      if (user == null) {
+          logger.error("User not found for username: {}", auth.getName());
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+      }
+
+      Program program = new Program();
+      program.setName(name.trim());
+      if (image != null && !image.isEmpty()) {
+          String imagePath = saveImage(image);
+          program.setImagePath(imagePath);
+      }
+      program.setExtractionRule(extractionRule);
+      program.setCreatedBy(user);
+      program.setCreatedAt(LocalDateTime.now());
+      program.setUpdateHistory("[]");
+
+      Program savedProgram = repository.save(program);
+      logger.info("Created program ID: {}", savedProgram.getId());
+      return savedProgram;
+  }
+
+  @PreAuthorize("hasRole('ENGINEER')")
+  @Override
+  public Program updateProgram(Long id, String name, MultipartFile image, String extractionRule) throws IOException {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      logger.info("Updating program ID: {} by user: {}", id, auth != null ? auth.getName() : "none");
+      logger.debug("Received extractionRule: {}", extractionRule);
+
+      Optional<Program> programOptional = repository.findById(id);
+      if (!programOptional.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Program not found");
+      }
+      Program program = programOptional.get();
+
+      if (name == null || name.trim().isEmpty()) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Program name is required");
+      }
+      Optional<Program> existingProgram = repository.findByName(name.trim());
+      if (existingProgram.isPresent() && !existingProgram.get().getId().equals(id)) {
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "Another program with name exists");
+      }
+      validateExtractionRule(extractionRule);
+      validateImageSize(image);
+
+      if (auth == null) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+      }
+      App_user user = userRepository.findByEmail(auth.getName());
+      if (user == null) {
+          logger.error("User not found for username: {}", auth.getName());
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+      }
+
+      // Track changed fields
+      ObjectNode historyEntry = objectMapper.createObjectNode();
+      historyEntry.put("updateTimestamp", LocalDateTime.now().toString());
+      historyEntry.put("updatedBy", user.getFirstName());
+      ObjectNode changes = objectMapper.createObjectNode();
+
+      // Compare and record changes for name
+      if (!program.getName().equals(name.trim())) {
+          ObjectNode nameChange = objectMapper.createObjectNode();
+          nameChange.put("oldValue", program.getName());
+          nameChange.put("newValue", name.trim());
+          changes.set("name", nameChange);
+      }
+
+      // Compare and record changes for imagePath
+      String newImagePath = program.getImagePath();
+      if (image != null && !image.isEmpty()) {
+          newImagePath = saveImage(image);
+      } else if (image == null && program.getImagePath() != null) {
+          newImagePath = null;
+      }
+      if ((program.getImagePath() == null && newImagePath != null) ||
+          (program.getImagePath() != null && !program.getImagePath().equals(newImagePath))) {
+          ObjectNode imageChange = objectMapper.createObjectNode();
+          imageChange.put("oldValue", program.getImagePath() != null ? program.getImagePath() : "");
+          imageChange.put("newValue", newImagePath != null ? newImagePath : "");
+          changes.set("imagePath", imageChange);
+      }
+
+      // Compare and record changes for extractionRule
+      if (!program.getExtractionRule().equals(extractionRule)) {
+          ObjectNode ruleChange = objectMapper.createObjectNode();
+          ruleChange.put("oldValue", program.getExtractionRule());
+          ruleChange.put("newValue", extractionRule);
+          changes.set("extractionRule", ruleChange);
+      }
+
+      // Only add history entry if there are changes
+      if (!changes.isEmpty()) {
+          historyEntry.set("changes", changes);
+          ArrayNode historyArray;
+          try {
+              if (program.getUpdateHistory() != null && !program.getUpdateHistory().isEmpty()) {
+                  historyArray = (ArrayNode) objectMapper.readTree(program.getUpdateHistory());
+              } else {
+                  historyArray = objectMapper.createArrayNode();
+              }
+          } catch (Exception e) {
+              logger.error("Failed to parse update history: {}", e.getMessage());
+              historyArray = objectMapper.createArrayNode();
+          }
+
+          historyArray.add(historyEntry);
+          program.setUpdateHistory(objectMapper.writeValueAsString(historyArray));
+      }
+
+      // Update program fields
+      program.setName(name.trim());
+      program.setImagePath(newImagePath);
+      program.setExtractionRule(extractionRule);
+      program.setCreatedBy(user);
+      program.setCreatedAt(LocalDateTime.now());
+
+      Program updatedProgram = repository.save(program);
+      logger.info("Updated program ID: {}", updatedProgram.getId());
+      return updatedProgram;
+  }
+
+  @Override
+  public Program getProgramById(Long id) {
+      logger.info("Fetching program ID: {}", id);
+      Optional<Program> programOptional = repository.findById(id);
+      if (!programOptional.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Program not found");
+      }
+      return programOptional.get();
+  }
+
+  @Override
+  public List<Program> getAllPrograms() {
+      logger.info("Fetching all programs");
+      return repository.findAll();
+  }
+
+  @PreAuthorize("hasRole('ENGINEER')")
+  @Override
+  public void deleteProgram(Long id) {
+      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      logger.info("Deleting program ID: {} by user: {}", id, auth != null ? auth.getName() : "none");
+
+      Optional<Program> programOptional = repository.findById(id);
+      if (!programOptional.isPresent()) {
+          throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Program not found");
+      }
+      Program program = programOptional.get();
+
+      if (auth == null) {
+          throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required");
+      }
+      App_user user = userRepository.findByEmail(auth.getName());
+      if (user == null) {
+          logger.error("User not found for username: {}", auth.getName());
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+      }
+
+      if (!program.getCuttingSheets().isEmpty()) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete program with associated cutting sheets");
+      }
+
+      repository.delete(program);
+      logger.info("Deleted program ID: {}", id);
+  }
+
+  @Override
+  public List<Program> searchProgramsByName(String name) {
+      logger.info("Searching programs: {}", name);
+      if (name == null || name.trim().isEmpty()) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Search name is required");
+      }
+      return repository.findByNameContainingIgnoreCase(name.trim());
+  }
+} package com.backend.cuttingsheet.dto;
+
+public class ProgramDTO {
+  private Long id;
+  private String name;
+  private String imagePath;
+  private String extractionRule;
+
+  // Getters and setters
+  public Long getId() { return id; }
+  public void setId(Long id) { this.id = id; }
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+  public String getImagePath() { return imagePath; }
+  public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+  public String getExtractionRule() { return extractionRule; }
+  public void setExtractionRule(String extractionRule) { this.extractionRule = extractionRule; }
+} package com.backend.cuttingsheet.entity;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "article_increments")
+public class ArticleIncrement {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(nullable = false)
+  private Long programId;
+
+  @Column(nullable = false)
+  private String article;
+
+  @Column(nullable = true)
+  private Long lastIncrement;
+
+  // Getters and Setters
+  public Long getId() { return id; }
+  public void setId(Long id) { this.id = id; }
+  public Long getProgramId() { return programId; }
+  public void setProgramId(Long programId) { this.programId = programId; }
+  public String getArticle() { return article; }
+  public void setArticle(String article) { this.article = article; }
+  public Long getLastIncrement() { return lastIncrement; }
+  public void setLastIncrement(Long lastIncrement) { this.lastIncrement = lastIncrement; }
+} package com.backend.cuttingsheet.entity;
+
+import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "programs")
+public class Program {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(unique = true, nullable = false)
+  private String name;
+
+  @Column(name = "image_path")
+  private String imagePath;
+
+  @Lob
+  @Column(name = "extraction_rule")
+  private String extractionRule;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "createdBy", nullable = false)
+  @JsonIgnore
+  private App_user createdBy;
+
+  @Column(nullable = false)
+  private LocalDateTime createdAt;
+
+  @OneToMany(mappedBy = "program", fetch = FetchType.LAZY)
+  @JsonIgnore
+  private List<CuttingSheet> cuttingSheets = new ArrayList<>();
+
+  @OneToMany(mappedBy = "program", fetch = FetchType.LAZY)
+  @JsonIgnore
+  private List<Evolution> evolutions = new ArrayList<>();
+
+  @Lob
+  @Column(name = "update_history")
+  private String updateHistory;
+
+  // Getters and Setters
+  public Long getId() { return id; }
+  public void setId(Long id) { this.id = id; }
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+  public String getImagePath() { return imagePath; }
+  public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+  public String getExtractionRule() { return extractionRule; }
+  public void setExtractionRule(String extractionRule) { this.extractionRule = extractionRule; }
+  public App_user getCreatedBy() { return createdBy; }
+  public void setCreatedBy(App_user createdBy) { this.createdBy = createdBy; }
+  public LocalDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+  public List<CuttingSheet> getCuttingSheets() { return cuttingSheets; }
+  public void setCuttingSheets(List<CuttingSheet> cuttingSheets) { this.cuttingSheets = cuttingSheets; }
+  public List<Evolution> getEvolutions() { return evolutions; }
+  public void setEvolutions(List<Evolution> evolutions) { this.evolutions = evolutions; }
+  public String getUpdateHistory() { return updateHistory; }
+  public void setUpdateHistory(String updateHistory) { this.updateHistory = updateHistory; }
+} package com.backend.cuttingsheet.entity;
+
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "cutting_sheets")
+public class CuttingSheet {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(nullable = false)
+  private String article;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "programId", nullable = false)
+  private Program program;
+
+  @Column(nullable = false)
+  private String indice;
+
+  @Column(nullable = false)
+  private String type;
+
+  @Column(nullable = false)
+  private boolean hasSerialNumber;
+
+  @Lob
+  private String operationsJson;
+
+  @Lob
+  private String revisionHistory;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "createdBy", nullable = false)
+  @JsonIgnore
+  private App_user createdBy;
+
+  @Column(nullable = false)
+  private LocalDateTime createdAt;
+
+  @ManyToMany
+  @JsonIgnore
+  @JoinTable(
+      name = "cutting_sheet_custom_operation",
+      joinColumns = @JoinColumn(name = "cuttingSheetId"),
+      inverseJoinColumns = @JoinColumn(name = "customOperationId")
+  )
+  private List<CustomOperation> customOperations = new ArrayList<>();
+
+  public static final List<String> ALLOWED_TYPES = Arrays.asList("mecanique", "cablage", "montage");
+
+  // Getters and Setters
+  public Long getId() { return id; }
+  public void setId(Long id) { this.id = id; }
+  public String getArticle() { return article; }
+  public void setArticle(String article) { this.article = article; }
+  public Program getProgram() { return program; }
+  public void setProgram(Program program) { this.program = program; }
+  public String getIndice() { return indice; }
+  public void setIndice(String indice) { this.indice = indice; }
+  public String getType() { return type; }
+  public void setType(String type) { this.type = type; }
+  public boolean isHasSerialNumber() { return hasSerialNumber; }
+  public void setHasSerialNumber(boolean hasSerialNumber) { this.hasSerialNumber = hasSerialNumber; }
+  public String getOperationsJson() { return operationsJson; }
+  public void setOperationsJson(String operationsJson) { this.operationsJson = operationsJson; }
+  public String getRevisionHistory() { return revisionHistory; }
+  public void setRevisionHistory(String revisionHistory) { this.revisionHistory = revisionHistory; }
+  public App_user getCreatedBy() { return createdBy; }
+  public void setCreatedBy(App_user createdBy) { this.createdBy = createdBy; }
+  public LocalDateTime getCreatedAt() { return createdAt; }
+  public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+  public List<CustomOperation> getCustomOperations() { return customOperations; }
+  public void setCustomOperations(List<CustomOperation> customOperations) { this.customOperations = customOperations; }
+} package com.backend.cuttingsheet.interfaces;
+
+import com.backend.cuttingsheet.entity.ArticleIncrement;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RequestMapping("/api/article-increments")
+public interface IArticleIncrementApi {
+  @PostMapping
+  ArticleIncrement createArticleIncrement(
+      @RequestBody ArticleIncrement articleIncrement
+  );
+
+  @PutMapping("/{id}")
+  ArticleIncrement updateArticleIncrement(
+      @PathVariable Long id,
+      @RequestBody ArticleIncrement articleIncrement
+  );
+
+  @GetMapping("/{id}")
+  ArticleIncrement getArticleIncrementById(@PathVariable Long id);
+
+  @GetMapping
+  List<ArticleIncrement> getAllArticleIncrements();
+
+  @DeleteMapping("/{id}")
+  void deleteArticleIncrement(@PathVariable Long id);
+
+  @GetMapping("/search")
+  List<ArticleIncrement> searchArticleIncrements(
+      @RequestParam(required = false) Long programId,
+      @RequestParam(required = false) String article
+  );
+} package com.backend.cuttingsheet.interfaces;
+
+import com.backend.cuttingsheet.entity.Program;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
+@RequestMapping("/api/programs")
+public interface IProgramApi {
+  @PostMapping(consumes = "multipart/form-data")
+  Program createProgram(
+      @RequestPart("name") String name,
+      @RequestPart(value = "image", required = false) MultipartFile image,
+      @RequestPart("extractionRule") String extractionRule
+  ) throws IOException;
+
+  @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+  Program updateProgram(
+      @PathVariable Long id,
+      @RequestPart("name") String name,
+      @RequestPart(value = "image", required = false) MultipartFile image,
+      @RequestPart("extractionRule") String extractionRule
+  ) throws IOException;
+
+  @GetMapping("/{id}")
+  Program getProgramById(@PathVariable Long id);
+
+  @GetMapping
+  List<Program> getAllPrograms();
+
+  @DeleteMapping("/{id}")
+  void deleteProgram(@PathVariable Long id);
+
+  @GetMapping("/search")
+  List<Program> searchProgramsByName(@RequestParam String name);
+} package com.backend.cuttingsheet.interfaces;
+
+import com.backend.cuttingsheet.dto.CuttingSheetDTO;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RequestMapping("/api/cuttingSheets")
+public interface ICuttingSheetApi {
+  @PostMapping
+  CuttingSheetDTO createCuttingSheet(@RequestBody String jsonPayload);
+
+  @GetMapping("/{id}")
+  CuttingSheetDTO getCuttingSheetById(@PathVariable Long id);
+
+  @GetMapping("/search/byArticle")
+  List<CuttingSheetDTO> getCuttingSheetByArticle(@RequestParam String article);
+
+  @GetMapping("/search/contain")
+  List<CuttingSheetDTO> searchByArticleContain(@RequestParam String article);
+
+  @GetMapping
+  List<CuttingSheetDTO> getAllCuttingSheets();
+
+  @PutMapping("/{id}")
+  CuttingSheetDTO updateCuttingSheet(@PathVariable Long id, @RequestBody String jsonPayload);
+
+  @DeleteMapping("/{id}")
+  void deleteCuttingSheet(@PathVariable Long id);
+
+  @GetMapping("/search")
+  List<CuttingSheetDTO> searchCuttingSheets(
+          @RequestParam(value = "program", required = false) String program,
+          @RequestParam(value = "article", required = false) String article,
+          @RequestParam(value = "type", required = false) String type
+  );
+} package com.backend.cuttingsheet.interfaces;
+
+import com.backend.cuttingsheet.entity.Program;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
+@RequestMapping("/api/programs")
+public interface IProgramApi {
+  @PostMapping(consumes = "multipart/form-data")
+  Program createProgram(
+      @RequestPart("name") String name,
+      @RequestPart(value = "image", required = false) MultipartFile image,
+      @RequestPart("extractionRule") String extractionRule
+  ) throws IOException;
+
+  @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+  Program updateProgram(
+      @PathVariable Long id,
+      @RequestPart("name") String name,
+      @RequestPart(value = "image", required = false) MultipartFile image,
+      @RequestPart("extractionRule") String extractionRule
+  ) throws IOException;
+
+  @GetMapping("/{id}")
+  Program getProgramById(@PathVariable Long id);
+
+  @GetMapping
+  List<Program> getAllPrograms();
+
+  @DeleteMapping("/{id}")
+  void deleteProgram(@PathVariable Long id);
+
+  @GetMapping("/search")
+  List<Program> searchProgramsByName(@RequestParam String name);
+} package com.backend.cuttingsheet.repository;
+
+import com.backend.cuttingsheet.entity.ArticleIncrement;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface ArticleIncrementRepository extends JpaRepository<ArticleIncrement, Long> {
+  Optional<ArticleIncrement> findByProgramIdAndArticle(Long programId, String article);
+
+  @Query("SELECT ai FROM ArticleIncrement ai WHERE ai.programId = :programId")
+  List<ArticleIncrement> findByProgramId(@Param("programId") Long programId);
+} package com.backend.cuttingsheet.repository;
+
+import com.backend.cuttingsheet.entity.CuttingSheet;
+import com.backend.cuttingsheet.entity.Program;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface CuttingSheetRepository extends JpaRepository<CuttingSheet, Long> {
+
+  // Replace findByArticleIgnoreCaseAndTrim with a custom query
+  @Query("SELECT cs FROM CuttingSheet cs WHERE TRIM(UPPER(cs.article)) = TRIM(UPPER(:article))")
+  List<CuttingSheet> findByArticleIgnoreCaseAndTrim(@Param("article") String article);
+
+  List<CuttingSheet> findByArticleContainingIgnoreCase(String article);
+
+  @Query("SELECT cs FROM CuttingSheet cs LEFT JOIN FETCH cs.program p " +
+         "WHERE (:program IS NULL OR p.name LIKE %:program%) " +
+         "AND (:article IS NULL OR cs.article LIKE %:article%) " +
+         "AND (:type IS NULL OR cs.type = :type)")
+  List<CuttingSheet> searchCuttingSheets(
+          @Param("program") String program,
+          @Param("article") String article,
+          @Param("type") String type
+  );
+  Optional<CuttingSheet> findByArticle(String article);
+  List<CuttingSheet> findByProgram(Program program);
+} package com.backend.cuttingsheet.repository;
+
+import com.backend.cuttingsheet.entity.Program;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ProgramRepository extends JpaRepository<Program, Long> {
+  Optional<Program> findByName(String name);
+
+  @Query("SELECT p FROM Program p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+  List<Program> findByNameContainingIgnoreCase(@Param("name") String name);
+
+  @Query("SELECT p FROM Program p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%')) " +
+         "OR LOWER(p.extractionRule) LIKE LOWER(CONCAT('%', :query, '%'))")
+  List<Program> searchPrograms(@Param("query") String query);L/
+} package com.backend.cuttingsheet.entity;
+
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "cutting_sheets")
+public class CuttingSheet {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String article;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "programId", nullable = false)
+    private Program program;
+
+    @Column(nullable = false)
+    private String indice;
+
+    @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
+    private boolean hasSerialNumber;
+
+    @Lob
+    private String operationsJson;
+
+    @Lob
+    private String revisionHistory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdBy", nullable = false)
+    @JsonIgnore
+    private App_user createdBy;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+        name = "cutting_sheet_custom_operation",
+        joinColumns = @JoinColumn(name = "cuttingSheetId"),
+        inverseJoinColumns = @JoinColumn(name = "customOperationId")
+    )
+    private List<CustomOperation> customOperations = new ArrayList<>();
+
+    public static final List<String> ALLOWED_TYPES = Arrays.asList("mecanique", "cablage", "montage");
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getArticle() { return article; }
+    public void setArticle(String article) { this.article = article; }
+    public Program getProgram() { return program; }
+    public void setProgram(Program program) { this.program = program; }
+    public String getIndice() { return indice; }
+    public void setIndice(String indice) { this.indice = indice; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public boolean isHasSerialNumber() { return hasSerialNumber; }
+    public void setHasSerialNumber(boolean hasSerialNumber) { this.hasSerialNumber = hasSerialNumber; }
+    public String getOperationsJson() { return operationsJson; }
+    public void setOperationsJson(String operationsJson) { this.operationsJson = operationsJson; }
+    public String getRevisionHistory() { return revisionHistory; }
+    public void setRevisionHistory(String revisionHistory) { this.revisionHistory = revisionHistory; }
+    public App_user getCreatedBy() { return createdBy; }
+    public void setCreatedBy(App_user createdBy) { this.createdBy = createdBy; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public List<CustomOperation> getCustomOperations() { return customOperations; }
+    public void setCustomOperations(List<CustomOperation> customOperations) { this.customOperations = customOperations; }
+} package com.backend.cuttingsheet.dto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public class CuttingSheetDTO {
+    private Long id;
+    private String article;
+    private ProgramDTO program;
+    private String indice;
+    private String type;
+    private boolean hasSerialNumber;
+    private String operationsJson;
+    private List<Long> customOperationIds;
+    private String revisionHistory;
+    private String createdBy;
+    private LocalDateTime createdAt;
+
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getArticle() { return article; }
+    public void setArticle(String article) { this.article = article; }
+    public ProgramDTO getProgram() { return program; }
+    public void setProgram(ProgramDTO program) { this.program = program; }
+    public String getIndice() { return indice; }
+    public void setIndice(String indice) { this.indice = indice; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public boolean isHasSerialNumber() { return hasSerialNumber; }
+    public void setHasSerialNumber(boolean hasSerialNumber) { this.hasSerialNumber = hasSerialNumber; }
+    public String getOperationsJson() { return operationsJson; }
+    public void setOperationsJson(String operationsJson) { this.operationsJson = operationsJson; }
+    public List<Long> getCustomOperationIds() { return customOperationIds; }
+    public void setCustomOperationIds(List<Long> customOperationIds) { this.customOperationIds = customOperationIds; }
+    public String getRevisionHistory() { return revisionHistory; }
+    public void setRevisionHistory(String revisionHistory) { this.revisionHistory = revisionHistory; }
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+} package com.backend.cuttingsheet.repository;
+
+import com.backend.cuttingsheet.entity.CuttingSheet;
+import com.backend.cuttingsheet.entity.Program;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface CuttingSheetRepository extends JpaRepository<CuttingSheet, Long> {
+
+    // Replace findByArticleIgnoreCaseAndTrim with a custom query
+    @Query("SELECT cs FROM CuttingSheet cs WHERE TRIM(UPPER(cs.article)) = TRIM(UPPER(:article))")
+    List<CuttingSheet> findByArticleIgnoreCaseAndTrim(@Param("article") String article);
+
+    List<CuttingSheet> findByArticleContainingIgnoreCase(String article);
+
+    @Query("SELECT cs FROM CuttingSheet cs LEFT JOIN FETCH cs.program p " +
+           "WHERE (:program IS NULL OR p.name LIKE %:program%) " +
+           "AND (:article IS NULL OR cs.article LIKE %:article%) " +
+           "AND (:type IS NULL OR cs.type = :type)")
+    List<CuttingSheet> searchCuttingSheets(
+            @Param("program") String program,
+            @Param("article") String article,
+            @Param("type") String type
+    );
+    Optional<CuttingSheet> findByArticle(String article);
+    List<CuttingSheet> findByProgram(Program program);
+} 

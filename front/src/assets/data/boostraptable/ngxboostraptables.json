@@ -1,0 +1,40 @@
+{
+    "EmployeeDetail": [
+        {
+            "id": 1,
+            "firstname": "Mark",
+            "lastname": "Otto",
+            "username": "@mdo"
+        },
+        {
+            "id": 2,
+            "firstname": "Jacob",
+            "lastname": "Thornton",
+            "username": "@fat"
+        },
+        {
+            "id": 3,
+            "firstname": "Larry",
+            "lastname": "the Bird",
+            "username": "@twitter"
+        },
+        {
+            "id": 4,
+            "firstname": "Fensy",
+            "lastname": "loir",
+            "username": "@kort"
+        },
+        {
+            "id": 5,
+            "firstname": "Piter",
+            "lastname": "Pan",
+            "username": "@google"
+        },
+        {
+            "id": 6,
+            "firstname": "July",
+            "lastname": "Dooley",
+            "username": "@bat"
+       }
+     ]
+}

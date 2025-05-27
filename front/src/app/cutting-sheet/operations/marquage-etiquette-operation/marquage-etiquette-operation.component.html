@@ -1,0 +1,36 @@
+<div [formGroup]="group">
+  <div formArrayName="tables" class="mt-4" *ngIf="etiquetteTable">
+    <div [formGroupName]="0" class="p-4 border rounded">
+      <h3 class="font-bold mb-2">Détails de l'Étiquette</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium">Référence de l'Étiquette</label>
+          <input
+            type="text"
+            formControlName="etiquetteRef"
+            class="mt-1 block w-full px-3 py-2 border rounded-md"
+            [class.border-red-500]="etiquetteTable.get('etiquetteRef')?.touched && etiquetteTable.get('etiquetteRef')?.invalid"
+          />
+          <div
+            *ngIf="etiquetteTable.get('etiquetteRef')?.touched && etiquetteTable.get('etiquetteRef')?.invalid"
+            class="text-red-500 text-sm"
+          >
+            La référence de l'étiquette est requise.
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Quantité Unitaire</label>
+          <input
+            type="number"
+            formControlName="qte"
+            class="mt-1 block w-full px-3 py-2 border rounded-md"
+            [class.border-red-500]="etiquetteTable.get('qte')?.touched && etiquetteTable.get('qte')?.invalid"
+          />
+          <div *ngIf="etiquetteTable.get('qte')?.touched && etiquetteTable.get('qte')?.invalid" class="text-red-500 text-sm">
+            La quantité est requise.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

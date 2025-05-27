@@ -1,0 +1,155 @@
+.min-h-screen {
+  min-height: 100vh;
+}
+
+button,
+select,
+input {
+  transition: all 0.3s ease-in-out;
+}
+
+.operation-slide {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.control-field {
+  margin-bottom: 10px;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 #e2e8f0;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4a5568;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2d3748;
+}
+
+.card {
+  width: 100%;
+  max-width: 250px;
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #1e3a8a;
+}
+
+.card p {
+  margin: 0 0 12px 0;
+  color: #2563eb;
+}
+
+.card button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.card button:hover {
+  background-color: #2563eb;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  .bg-white.shadow-md.rounded-lg.p-6 {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .w-full.max-w-3xl {
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: 100%;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Custom filter for #1e40af blue */
+.blue-filter-1e40af {
+  filter: hue-rotate(240deg) saturate(2) brightness(0.7); /* Approximates #1e40af */
+}

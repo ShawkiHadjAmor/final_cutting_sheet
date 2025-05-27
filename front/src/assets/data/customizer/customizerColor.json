@@ -1,0 +1,70 @@
+{
+  "colorArray": [
+    {
+      "cssClass": "bg-blue-grey"
+    },
+    {
+      "cssClass": "bg-primary"
+    },
+    {
+      "cssClass": "bg-danger"
+    },
+    {
+      "cssClass": "bg-success"
+    },
+    {
+      "cssClass": "bg-blue"
+    },
+    {
+      "cssClass": "bg-cyan"
+    },
+    {
+      "cssClass": "bg-pink"
+    },
+    {
+      "cssClass": "bg-gradient-x-grey-blue"
+    },
+    {
+      "cssClass": "bg-gradient-x-primary"
+    },
+    {
+      "cssClass": "bg-gradient-x-danger"
+    },
+    {
+      "cssClass": "bg-gradient-x-success"
+    },
+    {
+      "cssClass": "bg-gradient-x-blue"
+    },
+    {
+      "cssClass": "bg-gradient-x-cyan"
+    },
+    {
+      "cssClass": "bg-gradient-x-pink"
+    },
+    {
+      "cssClass": "bg-default"
+    },
+    {
+      "cssClass": "bg-blue-grey bg-lighten-4"
+    },
+    {
+      "cssClass": "bg-primary bg-lighten-4"
+    },
+    {
+      "cssClass": "bg-danger bg-lighten-4"
+    },
+    {
+      "cssClass": "bg-success bg-lighten-4"
+    },
+    {
+      "cssClass": "bg-blue bg-lighten-4"
+    },
+    {
+      "cssClass": "bg-cyan bg-lighten-4"
+    },
+    {
+      "cssClass": "bg-pink bg-lighten-4"
+    }
+  ]
+}

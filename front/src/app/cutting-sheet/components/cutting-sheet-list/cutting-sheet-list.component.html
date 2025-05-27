@@ -1,0 +1,124 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+  <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4 tracking-tight flex items-center">
+    <i class="fas fa-file-excel text-blue-600 mr-2"></i> Fiches de Coupe
+  </h2>
+
+  <!-- Search Section -->
+  <div class="mb-4 sm:mb-6 flex justify-between items-center">
+    <div class="w-full max-w-md">
+      <label for="programmeSearch" class="block text-sm font-medium text-blue-700 mb-1">Rechercher par Programme</label>
+      <input
+        id="programmeSearch"
+        type="text"
+        placeholder="Rechercher par programme..."
+        [(ngModel)]="programmeSearchTerm"
+        (ngModelChange)="onProgrammeSearchChange($event)"
+        class="w-full px-3 py-2 text-blue-800 border-2 border-blue-200 rounded-full focus:outline-none focus:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md"
+      />
+    </div>
+    <div class="ml-4">
+      <label for="typeSelect" class="block text-sm font-medium text-blue-700 mb-1">Filtrer par Type</label>
+      <select
+        id="typeSelect"
+        [(ngModel)]="selectedType"
+        (ngModelChange)="onTypeChange($event)"
+        class="px-3 py-2 text-blue-800 border-2 border-blue-200 rounded-full focus:outline-none focus:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md"
+      >
+        <option value="">Tous les Types</option>
+        <option value="mecanique">Mécanique</option>
+        <option value="montage">Montage</option>
+        <option value="cablage">Câblage</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Message Alert -->
+  <div *ngIf="message" class="mb-6">
+    <div
+      class="p-4 rounded-lg flex items-center justify-between"
+      [ngClass]="{
+        'bg-green-100 text-green-800': message.type === 'success',
+        'bg-red-100 text-red-800': message.type === 'error',
+        'bg-yellow-100 text-yellow-800': message.type === 'confirm'
+      }"
+    >
+      <span>{{ message.text }}</span>
+      <div *ngIf="message.type === 'confirm'" class="flex space-x-2">
+        <button
+          (click)="deleteCuttingSheet()"
+          class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+        >
+          Confirmer
+        </button>
+        <button
+          (click)="closeMessage()"
+          class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+        >
+          Annuler
+        </button>
+      </div>
+      <button
+        *ngIf="message.type !== 'confirm'"
+        (click)="closeMessage()"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-4">
+    <i class="fas fa-spinner fa-spin text-blue-600 text-2xl"></i>
+  </div>
+
+  <!-- Cutting Sheets -->
+  <div *ngIf="!isLoading && getObjectKeys(groupedCuttingSheets).length > 0">
+    <div *ngFor="let program of groupedCuttingSheets | keyvalue" class="mb-6 sm:mb-8">
+      <h3 class="text-xl sm:text-2xl font-bold text-blue-900 mb-2 tracking-tight flex items-center">
+        <span class="material-icons text-blue-600 mr-2">airplanemode_active</span>
+        {{ program.key }} :
+      </h3>
+
+      <div class="mb-4 flex items-center">
+        <label for="articleSearch-{{program.key}}" class="text-sm font-medium text-blue-700 mr-2 whitespace-nowrap">Rechercher par Article</label>
+        <input
+          id="articleSearch-{{program.key}}"
+          type="text"
+          placeholder="Rechercher dans {{ program.key }}..."
+          [(ngModel)]="articleSearchTerms[program.key]"
+          class="w-full max-w-xs px-3 py-1.5 text-blue-800 border-2 border-blue-200 rounded-full focus:outline-none focus:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md"
+        />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div *ngFor="let sheet of getFilteredSheets(program.key)" class="card bg-white border-2 border-blue-200 rounded-xl overflow-hidden relative group">
+          <div class="image-container bg-cover bg-center h-32 sm:h-40 md:h-48" [style.backgroundImage]="getImageUrl(sheet)">
+            <div class="bg-black bg-opacity-50 p-4 h-full flex flex-col justify-center">
+              <h3 class="text-lg sm:text-xl font-semibold text-white truncate">{{ sheet.article || 'N/A' }}</h3>
+              <p class="text-white text-xs sm:text-sm truncate">{{ sheet.program?.name || 'Sans programme' }}</p>
+            </div>
+          </div>
+          <div class="button-container p-4 flex justify-end space-x-2 absolute bottom-0 left-0 right-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button (click)="viewTemplate(sheet)" class="btn-animated bg-blue-500 text-white px-3 py-1 rounded-full text-xs sm:text-sm hover:bg-blue-600">
+              <span class="flex items-center">
+                <i class="fas fa-eye mr-1 text-xs sm:text-sm"></i> Voir
+              </span>
+            </button>
+            <button (click)="confirmDelete(sheet)" class="btn-animated bg-red-500 text-white px-3 py-1 rounded-full text-xs sm:text-sm hover:bg-red-600">
+              <span class="flex items-center">
+                <i class="fas fa-trash mr-1 text-xs sm:text-sm"></i> Supprimer
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="getFilteredSheets(program.key).length === 0" class="text-center py-4 text-blue-600 text-lg font-medium">
+        Aucune fiche de coupe trouvée pour ce programme.
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && getObjectKeys(groupedCuttingSheets).length === 0" class="text-center py-6 text-blue-600 text-lg font-medium">
+    Aucune fiche de coupe trouvée.
+  </div>
+</div>

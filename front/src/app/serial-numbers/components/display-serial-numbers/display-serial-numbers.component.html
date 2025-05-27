@@ -1,0 +1,103 @@
+<div class="container">
+  <h2 class="header">Numéros de série</h2>
+
+  <form [formGroup]="filterForm" class="filter-form">
+    <div class="form-group">
+      <label class="form-label">Article</label>
+      <input type="text" formControlName="article" class="form-input" placeholder="Article">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Programme</label>
+      <select formControlName="programId" class="form-input">
+        <option [ngValue]="null">Tous</option>
+        <option *ngFor="let program of programs" [ngValue]="program.id">{{ program.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">OF</label>
+      <input type="text" formControlName="orderNumber" class="form-input" placeholder="Numéro OF">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Date de création</label>
+      <input type="date" formControlName="createdAt" class="form-input">
+    </div>
+  </form>
+
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="serialNumbers.length === 0 && !isLoading && !errorMessage" class="no-results">
+    Aucun numéro de série trouvé.
+  </div>
+
+  <div *ngIf="serialNumbers.length > 0 && !isLoading" class="table-container">
+    <div class="desktop-table">
+      <table class="serial-table">
+        <thead>
+          <tr>
+            <th>Programme</th>
+            <th>Numéro de série de</th>
+            <th>Numéro de série à</th>
+            <th>Plan</th>
+            <th>Indice</th>
+            <th>Article</th>
+            <th>Incrément</th>
+            <th>Créé le</th>
+            <th>OF</th>
+            <th>Quantité</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sn of serialNumbers">
+            <td title="{{ sn.programName }}">{{ sn.programName }}</td>
+            <td title="{{ sn.serialNumberFrom }}">{{ sn.serialNumberFrom }}</td>
+            <td title="{{ sn.serialNumberTo }}">{{ sn.serialNumberTo }}</td>
+            <td title="{{ sn.plan }}">{{ sn.plan }}</td>
+            <td title="{{ sn.indice }}">{{ sn.indice }}</td>
+            <td title="{{ sn.article }}">{{ sn.article }}</td>
+            <td title="{{ sn.increment }}">{{ sn.increment }}</td>
+            <td title="{{ sn.createdAt | date:'medium':'fr-FR' }}">{{ sn.createdAt | date:'short':'fr-FR' }}</td>
+            <td title="{{ sn.orderNumber || 'N/A' }}">{{ sn.orderNumber || 'N/A' }}</td>
+            <td title="{{ sn.quantity || 'N/A' }}">{{ sn.quantity || 'N/A' }}</td>
+            <td title="{{ sn.date || 'N/A' }}">{{ sn.date || 'N/A' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mobile-table">
+      <div *ngFor="let sn of serialNumbers" class="serial-card">
+        <div class="card-grid">
+          <span class="card-label">Programme:</span>
+          <span class="card-value" title="{{ sn.programName }}">{{ sn.programName }}</span>
+          <span class="card-label">Série de:</span>
+          <span class="card-value" title="{{ sn.serialNumberFrom }}">{{ sn.serialNumberFrom }}</span>
+          <span class="card-label">Série à:</span>
+          <span class="card-value" title="{{ sn.serialNumberTo }}">{{ sn.serialNumberTo }}</span>
+          <span class="card-label">Plan:</span>
+          <span class="card-value" title="{{ sn.plan }}">{{ sn.plan }}</span>
+          <span class="card-label">Indice:</span>
+          <span class="card-value" title="{{ sn.indice }}">{{ sn.indice }}</span>
+          <span class="card-label">Article:</span>
+          <span class="card-value" title="{{ sn.article }}">{{ sn.article }}</span>
+          <span class="card-label">Incrément:</span>
+          <span class="card-value" title="{{ sn.increment }}">{{ sn.increment }}</span>
+          <span class="card-label">Créé le:</span>
+          <span class="card-value" title="{{ sn.createdAt | date:'medium':'fr-FR' }}">{{ sn.createdAt | date:'short':'fr-FR' }}</span>
+          <span class="card-label">OF:</span>
+          <span class="card-value" title="{{ sn.orderNumber || 'N/A' }}">{{ sn.orderNumber || 'N/A' }}</span>
+          <span class="card-label">Quantité:</span>
+          <span class="card-value" title="{{ sn.quantity || 'N/A' }}">{{ sn.quantity || 'N/A' }}</span>
+          <span class="card-label">Date:</span>
+          <span class="card-value" title="{{ sn.date || 'N/A' }}">{{ sn.date || 'N/A' }}</span>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

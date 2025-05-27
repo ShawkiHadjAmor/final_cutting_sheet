@@ -1,0 +1,66 @@
+[
+  {
+  	"name": "Marketing",
+   "showNewItem": false,
+   "kanbanId": 1,
+      "tickets": [{
+     "name": "Facebook Campaign 😎","date":"02/06/2021","comment": "1", "attachment": "3",  
+    "image": ["../../../assets/images/portrait/small/avatar-s-11.png",
+        "../../../assets/images/portrait/small/avatar-s-12.png"],"description":"Campaign","selectedLabel":"Primary"
+  },
+  {
+    "name": "Type Something", "date":"10/02/2021" ,"showImage":true,"comment": "", "attachment": "",
+     "bg_image":" ../../../assets/images/banner/banner-21.jpg","description":"","selectedLabel":"Primary"
+  },
+  {
+    "name": " Social Media Graphics",  "date":"03/01/2021" ,  "comment": "23", "attachment": "4",
+    "image": ["../../../assets/images/portrait/small/avatar-s-1.png",
+        "../../../assets/images/portrait/small/avatar-s-2.png"],"description":"Social Media Graphics","selectedLabel":"Primary"
+  },
+  {
+    "name": " Book newspaper ads online in popular newspapers",  "date": "", "comment": "56", "attachment": "2",
+    "image": ["../../../assets/images/portrait/small/avatar-s-3.png",
+        "../../../assets/images/portrait/small/avatar-s-4.png"],"description":"Book newspaper ads online in popular newspapers","selectedLabel":"Danger"
+  },
+  {
+    "name": "Twitter Marketing","date": "", "comment": "", "attachment": "","description":"Twitter Marketing","selectedLabel":"Primary"
+  }
+  ]
+  },
+  {
+  	"name": "UI Desiging",
+    "showNewItem": false,
+    "kanbanId": 2,
+	"tickets": [
+    {
+    "name": "Flat UI Kit Design","date": "", "comment": "", "attachment": "","description":"Flat UI Kit Design","selectedLabel":"Primary"
+  },
+  {
+    "name": "Drag people onto a card to indicate that.",  "date": "01/01/2021", "comment": "8","attachment": "",
+    "image": ["../../../assets/images/portrait/small/avatar-s-5.png",
+        "../../../assets/images/portrait/small/avatar-s-6.png"],"description":"Drag people onto a card to indicate that","selectedLabel":"Primary"
+  },
+  {
+    "name": "Application Design","date": "", "comment": "", "attachment": "","description":"Application Design","selectedLabel":"Info"
+  },
+  {
+     "name": "BBQ Logo Design 😱", "date": "06/01/2021", "comment": "56", "attachment": "2","description":"Application Design","selectedLabel":"Primary"
+  }]
+  },
+  {
+  	"name": "Develpoing",
+    "showNewItem": false,
+    "kanbanId": 3,
+	"tickets": [{
+    "name": "Database Management System (DBMS) is a collection of programs",  "date": "01/03/2021",  "comment": "10", "image": ["../../../assets/images/portrait/small/avatar-s-7.png",
+        "../../../assets/images/portrait/small/avatar-s-8.png", "../../../assets/images/portrait/small/avatar-s-9.png"],"description":"Application Design","selectedLabel":"Primary"
+  },
+  {
+    "name": "Admin Dashboard 🙂",  "date": "06/03/2021", "comment": "7","description":"Application Design","selectedLabel":"Danger"
+  },
+  {
+     "name": "Fix bootstrap progess bar with & issue",  "date": "09/03/2021", "image": ["../../../assets/images/portrait/small/avatar-s-10.png",
+        "../../../assets/images/portrait/small/avatar-s-11.png"],"description":"Application Design","selectedLabel":"Success"
+  }]
+  }  
+]

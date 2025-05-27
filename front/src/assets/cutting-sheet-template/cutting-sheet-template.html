@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    /* Base styles */
+    :root { --primary: white; --border: black; --background: white; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.2; color: black; background: white; padding: 10px; }
+    .fiche-container { max-width: 800px; margin: 0 auto; background: white; padding: 10px; }
+    .fiche-header { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding-bottom: 5px; }
+    .fiche-header h1 { font-size: 24px; margin: 0; margin-bottom: 2px; }
+    .header-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 2px 0; padding: 8px; background: white; font-size: 14px; }
+    .section { margin: 10px 0; padding: 8px; }
+    .section-header { background: white; color: black; padding: 4px 8px; margin: -8px -8px 8px -8px; font-weight: 500; text-align: center; font-size: 18px; }
+    .table-container { page-break-inside: avoid; margin-bottom: 10px; }
+    table.data-table { width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 12px; page-break-inside: avoid; }
+    th, td { padding: 4px; border: 1px solid black; text-align: left; color: black; }
+    th { background: white; font-weight: 500; }
+    .cable-header { margin-bottom: 6px; font-weight: bold; text-align: center; }
+    .total-row td { font-weight: bold; }
+    
+    /* Print-specific styles */
+    @media print {
+      @page { 
+        size: auto;
+        margin: 0mm; /* Remove default page margins */
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .fiche-container { 
+        margin: 0 auto; 
+        padding: 5px; 
+      }
+      .fiche-header h1 { font-size: 20px; }
+      .header-info { font-size: 10px; }
+      .section-header { font-size: 16px; }
+      
+      /* Hide browser headers/footers */
+      head, title {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="fiche-container">
+    <div class="fiche-header">
+      <img style="width:100px;height:200px;" src="../../assets/images/safran.png" alt="SAFRAN" />
+      <h1 style="text-align: center;">Fiche de coupe</h1>
+      <div>
+        <div>C2 - Confidential</div>
+        <div>Date: {{currentDate}}</div>
+      </div>
+    </div>
+    <div class="header-info">
+      <div>
+        <strong>Article:</strong> {{article}}<br>
+        <strong>N° OF:</strong> ............
+      </div>
+      <div>
+        <strong>Qté OF:</strong> ........<br>
+        <strong>Programme:</strong> {{programme}}
+      </div>
+      <div>
+        <strong>Atelier:</strong> ...........<br>
+        <strong>Activite:</strong> ........
+      </div>
+      <div>
+        <strong>Operateur :</strong> ..............
+      </div>
+      <div>
+        <strong>Date:</strong> ...........
+      </div>
+      <div>
+        <strong>Révision:</strong>.......
+      </div>
+    </div>
+    <!-- These placeholders will be replaced dynamically -->
+    {{cableTables}}
+    {{thermoTables}}
+    {{tmsTables}}
+    {{monchonTables}}
+  </div>
+  <script>
+    window.onload = function() {
+      window.print();
+      window.onafterprint = function() {
+        window.close();
+      };
+    };
+  </script>
+</body>
+</html>

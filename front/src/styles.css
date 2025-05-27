@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+
+/* Define Root Variables */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-wrapper {
+  display: grid;
+  min-height: 100vh;
+}
+
+/* Animated Title with Gradient Effect */
+.animated-title {
+  font-size: 1.5rem; /* Equivalent to Tailwind's text-2xl */
+  font-weight: 600; /* Equivalent to Tailwind's font-semibold */
+  color: #111827; /* Equivalent to Tailwind's text-gray-900 */
+}
+
+.dark .animated-title {
+  color: #ffffff; /* Equivalent to Tailwind's dark:text-white */
+}
+
+.animated-title {
+  background: linear-gradient(to right, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Smooth Transitions for Dark Mode */
+.dark * {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}

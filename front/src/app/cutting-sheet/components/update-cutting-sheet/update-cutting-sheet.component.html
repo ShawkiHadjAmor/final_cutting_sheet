@@ -1,0 +1,554 @@
+<div class="bg-white rounded-xl p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+  <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 tracking-tight flex items-center mb-4 sm:mb-6 border-b-2 border-blue-200 pb-4">
+    <span class="material-icons text-blue-600 mr-2">update</span>
+    Mettre à jour la fiche de coupe
+  </h2>
+
+  <!-- Sheet Selection -->
+  <div *ngIf="!sheetId" class="mb-8 bg-white border border-blue-200 rounded-lg p-4 shadow-sm" [formGroup]="searchForm">
+    <h3 class="text-lg font-bold text-blue-700 mb-4">Sélectionner une Fiche de Coupe à Modifier</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="input-container">
+        <label for="searchArticle" class="text-sm font-bold text-blue-700">Article</label>
+        <input
+          id="searchArticle"
+          type="text"
+          formControlName="searchArticle"
+          (ngModelChange)="filterSheets()"
+          class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+          placeholder="Rechercher par article"
+        />
+      </div>
+      <div class="input-container">
+        <label for="searchProgram" class="text-sm font-bold text-blue-700">Programme</label>
+        <select
+          id="searchProgram"
+          formControlName="searchProgram"
+          (ngModelChange)="filterSheets()"
+          class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        >
+          <option value="">Tous les programmes</option>
+          <option *ngFor="let program of programmes" [value]="program.id">{{ program.name }}</option>
+        </select>
+      </div>
+      <div class="input-container">
+        <label for="searchType" class="text-sm font-bold text-blue-700">Type</label>
+        <select
+          id="searchType"
+          formControlName="searchType"
+          (ngModelChange)="filterSheets()"
+          class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+        >
+          <option value="">Tous les types</option>
+          <option *ngFor="let type of allowedTypes" [value]="type">{{ type | titlecase }}</option>
+        </select>
+      </div>
+    </div>
+    <!-- Search Results -->
+    <div *ngIf="filteredSheets.length > 0" class="mt-6">
+      <h3 class="text-lg font-bold text-blue-700 mb-4">Fiches de Coupe Trouvées</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div
+          *ngFor="let sheet of filteredSheets"
+          class="bg-white border border-blue-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          (click)="selectSheet(sheet.id)"
+        >
+          <h4 class="text-lg font-bold text-blue-900 truncate">{{ sheet.article }}</h4>
+          <p class="text-sm text-blue-600 truncate">Programme: {{ sheet.program?.name || 'N/A' }}</p>
+          <p class="text-sm text-blue-600 truncate">Type: {{ sheet.type | titlecase }}</p>
+          <p class="text-sm text-blue-600 truncate">Indice: {{ sheet.indice }}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="filteredSheets.length === 0 && (searchForm.get('searchArticle')?.value || searchForm.get('searchProgram')?.value || searchForm.get('searchType')?.value)" class="text-center py-4 text-blue-700 text-lg font-medium">
+      Aucune fiche de coupe trouvée.
+    </div>
+  </div>
+
+  <!-- Update Form -->
+  <div *ngIf="sheetId" class="bg-white">
+    <form [formGroup]="cuttingSheetForm" (ngSubmit)="submitForm()" class="space-y-6">
+      <div class="bg-white border border-blue-200 rounded-lg p-4 shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="input-container">
+            <label for="article" class="text-sm font-bold text-blue-700">Article</label>
+            <input
+              type="text"
+              id="article"
+              formControlName="article"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              placeholder="Entrez le nom de l'article"
+              [class.border-red-500]="cuttingSheetForm.get('article')?.touched && cuttingSheetForm.get('article')?.invalid"
+            />
+            <div
+              *ngIf="cuttingSheetForm.get('article')?.touched && cuttingSheetForm.get('article')?.invalid"
+              class="text-red-500 text-xs mt-1"
+            >
+              L'article est requis.
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="programme" class="text-sm font-bold text-blue-700">Programme</label>
+            <select
+              id="programme"
+              formControlName="programme"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              [class.border-red-500]="cuttingSheetForm.get('programme')?.touched && cuttingSheetForm.get('programme')?.invalid"
+            >
+              <option value="">Sélectionnez un programme</option>
+              <option *ngFor="let prog of programmes" [value]="prog.id">{{ prog.name }}</option>
+            </select>
+            <div
+              *ngIf="cuttingSheetForm.get('programme')?.touched && cuttingSheetForm.get('programme')?.invalid"
+              class="text-red-500 text-xs mt-1"
+            >
+              Le programme est requis.
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="input-container">
+            <label for="indice" class="text-sm font-bold text-blue-700">Indice</label>
+            <input
+              type="text"
+              id="indice"
+              formControlName="indice"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              placeholder="Entrez l'indice"
+              [class.border-red-500]="cuttingSheetForm.get('indice')?.touched && cuttingSheetForm.get('indice')?.invalid"
+              readonly
+            />
+            <div
+              *ngIf="cuttingSheetForm.get('indice')?.touched && cuttingSheetForm.get('indice')?.invalid"
+              class="text-red-500 text-xs mt-1"
+            >
+              L'indice est requis.
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="type" class="text-sm font-bold text-blue-700">Type</label>
+            <select
+              id="type"
+              formControlName="type"
+              class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+              [class.border-red-500]="cuttingSheetForm.get('type')?.touched && cuttingSheetForm.get('type')?.invalid"
+            >
+              <option value="">Sélectionnez le type</option>
+              <option *ngFor="let type of allowedTypes" [value]="type">{{ type | titlecase }}</option>
+            </select>
+            <div
+              *ngIf="cuttingSheetForm.get('type')?.touched && cuttingSheetForm.get('type')?.invalid"
+              class="text-red-500 text-xs mt-1"
+            >
+              Le type est requis.
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <label class="text-sm font-bold text-blue-700">Numéro de série</label>
+          <div class="flex space-x-4 mt-2">
+            <label class="flex items-center">
+              <input
+                type="radio"
+                formControlName="hasSerialNumber"
+                [value]="true"
+                class="mr-2"
+              />
+              Oui
+            </label>
+            <label class="flex items-center">
+              <input
+                type="radio"
+                formControlName="hasSerialNumber"
+                [value]="false"
+                class="mr-2"
+              />
+              Non
+            </label>
+          </div>
+          <div
+            *ngIf="cuttingSheetForm.get('hasSerialNumber')?.touched && cuttingSheetForm.get('hasSerialNumber')?.invalid"
+            class="text-red-500 text-xs mt-1"
+          >
+            Veuillez sélectionner si la fiche de coupe a un numéro de série.
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-blue-200 rounded-lg p-4 shadow-sm">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-blue-700">Opérations</h3>
+          <button
+            type="button"
+            (click)="addNewOperation()"
+            class="px-3 py-1 text-sm bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors duration-300"
+          >
+            + Ajouter une opération
+          </button>
+        </div>
+        <div class="space-y-4" formArrayName="operations">
+          <ng-container *ngFor="let operation of operations.controls; let i = index">
+            <div
+              [formGroupName]="i"
+              class="bg-white border border-blue-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-sm font-bold text-blue-700">
+                  Opération {{ i + 1 }} : {{ operation.get('operation')?.value ? getOperationLabel(operation.get('operation')?.value) : 'Non sélectionné' }}
+                </label>
+                <div class="flex space-x-2">
+                  <button
+                    type="button"
+                    (click)="openOperationModal(i)"
+                    class="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors duration-300"
+                  >
+                    Modifier
+                  </button>
+                  <button
+                    type="button"
+                    *ngIf="operations.length > 1"
+                    (click)="removeOperation(i)"
+                    class="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors duration-300"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+              <div
+                *ngIf="operation.get('operation')?.touched && operation.get('operation')?.invalid"
+                class="text-red-500 text-xs mt-1"
+              >
+                Veuillez sélectionner une opération valide.
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="mt-4 w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+        [disabled]="isLoading || cuttingSheetForm.invalid || operations.length === 0"
+      >
+        {{ isLoading ? 'Mise à jour en cours...' : 'Mettre à jour la fiche de coupe' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative z-10">
+      <img
+        src="https://img.icons8.com/color/48/000000/microsoft-excel-2019.png"
+        alt="Loading"
+        class="w-16 h-16 animate-spin"
+        style="filter: invert(25%) sepia(50%) saturate(500%) hue-rotate(200deg)"
+      />
+    </div>
+  </div>
+
+  <!-- Operation Modal -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50"
+      (click)="closeOperationModal()"
+      (@overlayAnimation.start)="onOverlayAnimationStart($event)"
+      (@overlayAnimation.done)="onOverlayAnimationDone($event)"
+    ></div>
+    <div
+      class="bg-white rounded-lg p-6 w-full max-w-2xl relative z-10 flex flex-col"
+      style="height: 90vh;"
+      (@popupAnimation.start)="onPopupAnimationStart($event)"
+      (@popupAnimation.done)="onPopupAnimationDone($event)"
+    >
+      <h3 class="text-lg font-bold text-blue-900 mb-4">Modifier l'opération</h3>
+      <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <ng-container *ngIf="modalOperationForm">
+          <div [formGroup]="modalOperationForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm font-bold text-blue-700">Type d'opération</label>
+                <select
+                  formControlName="operation"
+                  class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+                  [class.border-red-500]="modalOperationForm.get('operation')?.touched && modalOperationForm.get('operation')?.invalid"
+                >
+                  <option value="">Sélectionnez une opération</option>
+                  <option value="cable">Câble</option>
+                  <option value="thermo">Thermo</option>
+                  <option value="tms">Marquage TMS</option>
+                  <option value="monchon">Manchon Vierge</option>
+                  <option value="marquageLaser">Marquage Laser</option>
+                  <option value="marquageEtiquette">Marquage Étiquette</option>
+                  <option value="kittingCablage">Kitting Câblage/Thermo</option>
+                  <option value="coupeCableDansUap">Coupe Câble dans UAP</option>
+                  <option value="marquageLaserTms">Marquage Laser TMS</option>
+                  <option value="custom">Personnalisée</option>
+                </select>
+                <div
+                  *ngIf="modalOperationForm.get('operation')?.touched && modalOperationForm.get('operation')?.invalid"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  Veuillez sélectionner une opération.
+                </div>
+              </div>
+              <div *ngIf="modalOperationForm.get('operation')?.value === 'custom'">
+                <label class="text-sm font-bold text-blue-700">Opération personnalisée</label>
+                <select
+                  formControlName="customOperation"
+                  class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+                  [class.border-red-500]="modalOperationForm.get('customOperation')?.touched && modalOperationForm.get('customOperation')?.invalid"
+                >
+                  <option value="">Sélectionnez une opération personnalisée</option>
+                  <option *ngFor="let customOp of customOperations" [value]="customOp.id">{{ customOp.name }}</option>
+                </select>
+                <div
+                  *ngIf="modalOperationForm.get('customOperation')?.touched && modalOperationForm.get('customOperation')?.invalid"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  Veuillez sélectionner une opération personnalisée.
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'cable'">
+              <app-cable-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-cable-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'thermo'">
+              <app-thermo-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-thermo-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'tms'">
+              <app-tms-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-tms-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'monchon'">
+              <app-monchon-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-monchon-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'marquageLaser'">
+              <app-marquage-laser-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (fileChanged)="onFileChange($event)"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-marquage-laser-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'marquageEtiquette'">
+              <app-etiquette-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+              ></app-etiquette-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'kittingCablage'">
+              <app-kitting-cablage-operation
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-kitting-cablage-operation>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'coupeCableDansUap'">
+              <app-coupe-cable-dans-uap
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+                (quantityChanged)="onQuantityChanged($event, modalOperationIndex ?? 0)"
+              ></app-coupe-cable-dans-uap>
+            </div>
+            <div *ngIf="modalOperationForm.get('operation')?.value === 'marquageLaserTms'">
+              <app-marquage-laser-tms
+                [group]="modalOperationForm"
+                [index]="modalOperationIndex ?? 0"
+              ></app-marquage-laser-tms>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="flex justify-end mt-4 space-x-2 pt-4 border-t border-blue-200">
+        <button
+          type="button"
+          (click)="closeOperationModal()"
+          class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors duration-300"
+        >
+          Annuler
+        </button>
+        <button
+          type="button"
+          (click)="saveAndCloseModal()"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+          [disabled]="modalOperationForm?.invalid"
+        >
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revision Modal -->
+  <div *ngIf="revisionModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50"
+      (click)="closeRevisionModal()"
+      (@overlayAnimation.start)="onOverlayAnimationStart($event)"
+      (@overlayAnimation.done)="onOverlayAnimationDone($event)"
+    ></div>
+    <div
+      class="bg-white rounded-lg p-6 w-full max-w-md relative z-10 shadow-lg"
+      (@popupAnimation.start)="onPopupAnimationStart($event)"
+      (@popupAnimation.done)="onPopupAnimationDone($event)"
+    >
+      <h3 class="text-lg font-bold text-blue-900 mb-4">Créer une révision</h3>
+      <form [formGroup]="revisionForm" class="space-y-4">
+        <div class="input-container">
+          <label for="newIndice" class="text-sm font-bold text-blue-700">Nouvel indice</label>
+          <input
+            type="text"
+            id="newIndice"
+            formControlName="newIndice"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            placeholder="Entrez le nouvel indice"
+            [class.border-red-500]="revisionForm.get('newIndice')?.touched && revisionForm.get('newIndice')?.invalid"
+          />
+          <div
+            *ngIf="revisionForm.get('newIndice')?.touched && revisionForm.get('newIndice')?.invalid"
+            class="text-red-500 text-xs mt-1"
+          >
+            Le nouvel indice est requis.
+          </div>
+        </div>
+        <div class="input-container">
+          <label for="revisionObject" class="text-sm font-bold text-blue-700">Objet de la révision</label>
+          <textarea
+            id="revisionObject"
+            formControlName="revisionObject"
+            class="w-full px-4 py-2 text-sm border-2 border-blue-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-400 transition-colors duration-300"
+            placeholder="Décrivez l'objet de la révision"
+            [class.border-red-500]="revisionForm.get('revisionObject')?.touched && revisionForm.get('revisionObject')?.invalid"
+          ></textarea>
+          <div
+            *ngIf="revisionForm.get('revisionObject')?.touched && revisionForm.get('revisionObject')?.invalid"
+            class="text-red-500 text-xs mt-1"
+          >
+            L'objet de la révision est requis.
+          </div>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button
+            type="button"
+            (click)="closeRevisionModal()"
+            class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors duration-300"
+          >
+            Annuler
+          </button>
+          <button
+            type="button"
+            (click)="saveRevision()"
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-300"
+            [disabled]="revisionForm.invalid"
+          >
+            Enregistrer et Mettre à jour
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Result Modal -->
+  <div *ngIf="showResultModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50"
+      (click)="closeResultModal()"
+      (@overlayAnimation.start)="onOverlayAnimationStart($event)"
+      (@overlayAnimation.done)="onOverlayAnimationDone($event)"
+    ></div>
+    <div
+      class="bg-white rounded-lg p-6 w-full max-w-md relative z-10 shadow-lg"
+      (@resultAnimation.start)="onResultAnimationStart($event)"
+      (@resultAnimation.done)="onResultAnimationDone($event)"
+    >
+      <div class="flex items-center mb-4">
+        <ng-container *ngIf="resultModalTitle === 'Succès'">
+          <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <h3 class="text-lg font-bold text-green-600">{{ resultModalTitle }}</h3>
+        </ng-container>
+        <ng-container *ngIf="resultModalTitle === 'Erreur'">
+          <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 class="text-lg font-bold text-red-600">{{ resultModalTitle }}</h3>
+        </ng-container>
+      </div>
+      <p class="text-gray-700 mb-6">{{ resultModalMessage }}</p>
+      <div class="flex justify-end">
+        <button
+          (click)="closeResultModal()"
+          class="px-4 py-2 text-sm font-medium text-white rounded-md transition-colors duration-300"
+          [ngClass]="{
+            'bg-green-600 hover:bg-green-700': resultModalTitle === 'Succès',
+            'bg-red-600 hover:bg-red-700': resultModalTitle === 'Erreur'
+          }"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invalid Fields Modal -->
+  <div *ngIf="isInvalidFieldsModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50"
+      (click)="closeInvalidFieldsModal()"
+      (@overlayAnimation.start)="onOverlayAnimationStart($event)"
+      (@overlayAnimation.done)="onOverlayAnimationDone($event)"
+    ></div>
+    <div
+      class="bg-white rounded-lg p-6 w-full max-w-md relative z-10 shadow-lg"
+      (@invalidFieldsAnimation.start)="onInvalidFieldsAnimationStart($event)"
+      (@invalidFieldsAnimation.done)="onInvalidFieldsAnimationDone($event)"
+    >
+      <h3 class="text-lg font-bold text-red-600 mb-4">Champs invalides</h3>
+      <p class="text-gray-700 mb-4">Veuillez corriger les champs suivants :</p>
+      <ul class="space-y-2 mb-6">
+        <li *ngFor="let field of invalidFields" class="flex items-center space-x-2 text-red-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>{{ field.operation }} - {{ field.field }}</span>
+          <span *ngIf="field.table >= 0"> (Tableau {{ field.table + 1 }})</span>
+          <span *ngIf="field.row !== undefined"> (Ligne {{ field.row + 1 }})</span>
+          <button
+            *ngIf="field.operation !== 'Formulaire Principal'"
+            (click)="navigateToField(field)"
+            class="ml-2 text-blue-500 underline text-xs"
+          >
+            Corriger
+          </button>
+        </li>
+      </ul>
+      <div class="flex justify-end">
+        <button
+          (click)="closeInvalidFieldsModal()"
+          class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-300"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

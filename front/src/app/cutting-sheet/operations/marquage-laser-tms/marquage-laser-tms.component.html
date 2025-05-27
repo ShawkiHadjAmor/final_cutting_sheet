@@ -1,0 +1,211 @@
+<div [formGroup]="group" class="space-y-6">
+  <div formArrayName="tables" class="space-y-6">
+    <!-- Input Table Section -->
+    <div *ngIf="inputTable" [formGroupName]="0" class="bg-gray-100 p-4 rounded-lg">
+      <h4 class="text-lg font-medium text-blue-700 mb-2">Tableau d'Entrée</h4>
+      <div formArrayName="rows" class="space-y-4">
+        <div
+          *ngFor="let row of getTableRows(0)?.controls || []; let rowIdx = index"
+          [formGroupName]="rowIdx"
+          class="bg-white p-4 rounded-lg shadow-sm"
+        >
+          <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+            <div class="flex-1">
+              <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Référence TMS Vierge</label>
+              <input
+                type="text"
+                formControlName="tmsViergeRef"
+                class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                [class.border-red-500]="row.get('tmsViergeRef')?.touched && row.get('tmsViergeRef')?.invalid"
+                placeholder="Entrez la référence TMS Vierge"
+              />
+              <div
+                *ngIf="row.get('tmsViergeRef')?.touched && row.get('tmsViergeRef')?.invalid"
+                class="text-red-500 text-sm"
+              >
+                La référence TMS Vierge est requise.
+              </div>
+            </div>
+            <div class="flex-1">
+              <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Quantité</label>
+              <input
+                type="number"
+                formControlName="quantite"
+                class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                [class.border-red-500]="row.get('quantite')?.touched && row.get('quantite')?.invalid"
+                placeholder="Entrez la quantité"
+                min="1"
+              />
+              <div
+                *ngIf="row.get('quantite')?.touched && row.get('quantite')?.invalid"
+                class="text-red-500 text-sm"
+              >
+                La quantité doit être d'au moins 1.
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end mt-2">
+            <button
+              type="button"
+              (click)="removeRow(0, rowIdx)"
+              [disabled]="(getTableRows(0)?.length || 0) <= 1"
+              class="px-3 py-1 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md disabled:opacity-50"
+            >
+              Supprimer la Ligne
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-end mt-2">
+          <button
+            type="button"
+            (click)="addRow(0)"
+            class="px-3 py-1 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md"
+          >
+            Ajouter une Ligne
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output Tables Section -->
+    <div
+      *ngFor="let outputTable of outputTables; let tableIdx = index"
+      [formGroupName]="tableIdx + 1"
+      class="bg-gray-100 p-4 rounded-lg"
+    >
+      <h4 class="text-lg font-medium text-blue-700 mb-2">Tableau de Sortie {{ tableIdx + 1 }}</h4>
+      <div formArrayName="rows" class="space-y-4">
+        <div
+          *ngFor="let row of getTableRows(tableIdx + 1)?.controls || []; let rowIdx = index"
+          [formGroupName]="rowIdx"
+          class="bg-white p-4 rounded-lg shadow-sm"
+        >
+          <div class="flex flex-col space-y-4">
+            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+              <div class="flex-1">
+                <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Référence TMS Vierge 1</label>
+                <input
+                  type="text"
+                  formControlName="tmsViergeRef1"
+                  class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                  [class.border-red-500]="row.get('tmsViergeRef1')?.touched && row.get('tmsViergeRef1')?.invalid"
+                  placeholder="Référence TMS Vierge 1 (de l'entrée)"
+                  [disabled]="true"
+                />
+                <div
+                  *ngIf="row.get('tmsViergeRef1')?.touched && row.get('tmsViergeRef1')?.invalid"
+                  class="text-red-500 text-sm"
+                >
+                  La référence TMS Vierge 1 est requise.
+                </div>
+              </div>
+              <div class="flex-1">
+                <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Texte de Marquage</label>
+                <input
+                  type="text"
+                  formControlName="texteDeMarquage"
+                  class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                  [class.border-red-500]="row.get('texteDeMarquage')?.touched && row.get('texteDeMarquage')?.invalid"
+                  placeholder="Entrez le texte de marquage"
+                />
+                <div
+                  *ngIf="row.get('texteDeMarquage')?.touched && row.get('texteDeMarquage')?.invalid"
+                  class="text-red-500 text-sm"
+                >
+                  Le texte de marquage est requis.
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+              <div class="flex-1">
+                <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Quantité Unitaire</label>
+                <input
+                  type="number"
+                  formControlName="quantiteUnitaire"
+                  class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                  [class.border-red-500]="row.get('quantiteUnitaire')?.touched && row.get('quantiteUnitaire')?.invalid"
+                  placeholder="Entrez la quantité unitaire"
+                  min="1"
+                />
+                <div
+                  *ngIf="row.get('quantiteUnitaire')?.touched && row.get('quantiteUnitaire')?.invalid"
+                  class="text-red-500 text-sm"
+                >
+                  La quantité unitaire doit être d'au moins 1.
+                </div>
+              </div>
+              <div class="flex-1">
+                <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Position de Marquage</label>
+                <input
+                  type="text"
+                  formControlName="positionDeMarquage"
+                  class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                  [class.border-red-500]="row.get('positionDeMarquage')?.touched && row.get('positionDeMarquage')?.invalid"
+                  placeholder="Entrez la position de marquage"
+                />
+                <div
+                  *ngIf="row.get('positionDeMarquage')?.touched && row.get('positionDeMarquage')?.invalid"
+                  class="text-red-500 text-sm"
+                >
+                  La position de marquage est requise.
+                </div>
+              </div>
+              <div class="flex-1">
+                <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Programme</label>
+                <input
+                  type="text"
+                  formControlName="programme"
+                  class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                  [class.border-red-500]="row.get('programme')?.touched && row.get('programme')?.invalid"
+                  placeholder="Entrez le programme"
+                />
+                <div
+                  *ngIf="row.get('programme')?.touched && row.get('programme')?.invalid"
+                  class="text-red-500 text-sm"
+                >
+                  Le programme est requis.
+                </div>
+              </div>
+              <div class="flex-1">
+                <label class="text-sm font-medium text-blue-700 dark:text-gray-300">Quantité à Imprimer</label>
+                <input
+                  type="number"
+                  formControlName="quantiteAImprimer"
+                  class="w-full px-4 py-2 text-sm border rounded-md bg-gray-50 dark:bg-gray-700 dark:text-white"
+                  [class.border-red-500]="row.get('quantiteAImprimer')?.touched && row.get('quantiteAImprimer')?.invalid"
+                  placeholder="Entrez la quantité à imprimer"
+                  min="1"
+                />
+                <div
+                  *ngIf="row.get('quantiteAImprimer')?.touched && row.get('quantiteAImprimer')?.invalid"
+                  class="text-red-500 text-sm"
+                >
+                  La quantité à imprimer doit être d'au moins 1.
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end mt-2">
+              <button
+                type="button"
+                (click)="removeOutputRow(tableIdx + 1, rowIdx)"
+                [disabled]="(getTableRows(tableIdx + 1)?.length || 0) <= 1"
+                class="px-3 py-1 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md disabled:opacity-50"
+              >
+                Supprimer la Ligne
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end mt-2">
+          <button
+            type="button"
+            (click)="addOutputRow(tableIdx + 1)"
+            class="px-3 py-1 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md"
+          >
+            Ajouter une Ligne
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
